@@ -1,5 +1,4 @@
 import { supabase, requireAdmin } from './supabase-client.js';
-import { WORKER_URL } from './config.js';
 import { toast, escapeHtml, dificultadLabel, parseAiJson } from './utils.js';
 
 let recipes = [];
@@ -334,12 +333,12 @@ async function runAiParse() {
   $('#ai-status').textContent = 'Analizando con IA...';
 
   try {
-    const res = await fetch(`${WORKER_URL}/parse`, {
+    const res = await fetch('/api/parse', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text }),
     });
-    if (!res.ok) throw new Error('Worker respondio ' + res.status);
+    if (!res.ok) throw new Error('api/parse respondio ' + res.status);
     const raw = await res.text();
     const parsed = parseAiJson(raw);
     if (!parsed) throw new Error('Respuesta de IA no valida');

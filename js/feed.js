@@ -1,5 +1,4 @@
 import { supabase, requireAuth, getProfile } from './supabase-client.js';
-import { WORKER_URL } from './config.js';
 import { toast, escapeHtml, dificultadLabel } from './utils.js';
 
 const $ = (sel) => document.querySelector(sel);
@@ -75,8 +74,6 @@ async function getOrderedIds(recipesList, taste, userId) {
 }
 
 async function fetchAiOrder(recipesList, taste) {
-  if (!WORKER_URL || WORKER_URL.includes('YOUR-WORKER')) return null;
-
   const ids = recipesList.map((r) => r.id);
   const { data: ings } = await supabase
     .from('recipe_ingredients')
@@ -101,12 +98,12 @@ async function fetchAiOrder(recipesList, taste) {
     dificultad: r.dificultad,
   }));
 
-  const res = await fetch(`${WORKER_URL}/feed`, {
+  const res = await fetch('/api/feed', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ taste_profile: taste || {}, recipes: payloadRecipes }),
   });
-  if (!res.ok) throw new Error('worker ' + res.status);
+  if (!res.ok) throw new Error('api/feed ' + res.status);
   const data = await res.json();
   if (!Array.isArray(data)) throw new Error('formato invalido');
   return data;
