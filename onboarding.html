@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nappe — Cuentanos tus gustos</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .ob-top { padding: calc(18px + env(safe-area-inset-top)) 20px 10px; display: flex; align-items: center; gap: 14px; }
+  .ob-top .progress-dots { flex: 1; }
+  .ob-step { display: none; flex-direction: column; flex: 1; padding: 10px 20px 24px; }
+  .ob-step.active { display: flex; }
+  .ob-question { margin: 10px 0 22px; }
+  .free-add { display: flex; gap: 8px; margin: 16px 0 10px; }
+  .free-add input { flex: 1; padding: 12px; background: var(--bg-input); border: var(--edge); border-radius: var(--radius); color: var(--fg); }
+  .level-card { text-align: left; padding: 20px; margin-bottom: 12px; }
+  .level-card .t { display:block; font-family: var(--font-display); text-transform: uppercase; font-size: 1.1rem; margin-bottom: 4px; }
+  .level-card .d { display:block; font-size: 0.82rem; color: var(--fg-dim); font-family: var(--font-body); text-transform: none; letter-spacing: 0; }
+  .ob-nav { display: flex; gap: 10px; padding: 0 20px calc(20px + env(safe-area-inset-bottom)); }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="ob-top">
+    <button class="btn btn-ghost btn-sm" id="back-step" style="width:auto;">&larr;</button>
+    <div class="progress-dots" id="progress-dots"></div>
+  </div>
+
+  <form id="ob-form" class="grow" style="display:flex; flex-direction:column;">
+
+    <div class="ob-step active" data-step="1">
+      <div class="ob-question"><h2>¿Que cocinas te gustan?</h2><p>Elige todas las que quieras.</p></div>
+      <div class="choice-grid" id="grid-cocinas"></div>
+    </div>
+
+    <div class="ob-step" data-step="2">
+      <div class="ob-question"><h2>Ingredientes que te encantan</h2><p>Elige o añade los tuyos.</p></div>
+      <div class="free-add">
+        <input type="text" id="fav-input" placeholder="Añadir ingrediente...">
+        <button type="button" class="btn btn-ghost btn-sm" id="fav-add">Añadir</button>
+      </div>
+      <div class="choice-grid" id="grid-favoritos"></div>
+    </div>
+
+    <div class="ob-step" data-step="3">
+      <div class="ob-question"><h2>Ingredientes que odias o no puedes comer</h2><p>Alergias, intolerancias o simplemente no te gustan.</p></div>
+      <div class="free-add">
+        <input type="text" id="hate-input" placeholder="Añadir ingrediente...">
+        <button type="button" class="btn btn-ghost btn-sm" id="hate-add">Añadir</button>
+      </div>
+      <div class="choice-grid" id="grid-odiados"></div>
+    </div>
+
+    <div class="ob-step" data-step="4">
+      <div class="ob-question"><h2>¿Cual es tu nivel en la cocina?</h2></div>
+      <div id="grid-nivel"></div>
+    </div>
+
+    <div class="ob-step" data-step="5">
+      <div class="ob-question"><h2>¿Cuanto tiempo sueles tener para cocinar?</h2></div>
+      <div id="grid-tiempo"></div>
+    </div>
+
+    <div class="grow"></div>
+    <div class="ob-nav">
+      <button type="submit" class="btn btn-primary" id="next-btn">Siguiente</button>
+    </div>
+  </form>
+</div>
+
+<script type="module" src="js/onboarding.js"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nappe</title>
+<meta name="description" content="Recetas a tu punto. Feed personalizado y escaneo de nevera.">
+<meta name="theme-color" content="#0b0b0a">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="screen">
+  <div class="wrap grow center" style="padding-top: calc(60px + env(safe-area-inset-top)); padding-bottom: 40px;">
+
+    <div style="margin-bottom: 56px;">
+      <h1 style="font-size: 3.2rem; margin-bottom: 4px;">Nappe</h1>
+      <p style="color: var(--fg-faint); text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.08em;">
+        Recetas a tu punto
+      </p>
+    </div>
+
+    <div id="auth-view" style="width: 100%;">
+
+      <div id="signed-out">
+        <form id="magic-form" style="text-align: left;">
+          <div class="field">
+            <label for="email">Correo electronico</label>
+            <input type="email" id="email" name="email" placeholder="tu@correo.com" autocomplete="email" required>
+          </div>
+          <button type="submit" class="btn btn-primary" id="magic-btn">Enviar enlace de acceso</button>
+        </form>
+
+        <div style="display:flex; align-items:center; gap:12px; margin: 22px 0; color: var(--fg-faint); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
+          <div style="flex:1; height:1px; background: var(--line);"></div>
+          o
+          <div style="flex:1; height:1px; background: var(--line);"></div>
+        </div>
+
+        <button type="button" class="btn btn-ghost" id="google-btn">Continuar con Google</button>
+
+        <p id="auth-msg" style="margin-top: 20px; font-size: 0.85rem; min-height: 1.2em;"></p>
+      </div>
+
+      <div id="signed-in" class="hidden">
+        <p>Sesion iniciada.</p>
+        <button type="button" class="btn btn-primary" id="continue-btn">Continuar</button>
+        <button type="button" class="btn btn-ghost" id="logout-btn" style="margin-top: 12px;">Cerrar sesion</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { supabase, getSession, getProfile } from './js/supabase-client.js';
+import { toast } from './js/utils.js';
+
+const signedOut = document.getElementById('signed-out');
+const signedIn = document.getElementById('signed-in');
+const authMsg = document.getElementById('auth-msg');
+
+async function routeIfSignedIn() {
+  const session = await getSession();
+  if (!session) return;
+  signedOut.classList.add('hidden');
+  signedIn.classList.remove('hidden');
+  return session;
+}
+
+async function goToApp(user) {
+  try {
+    const profile = await getProfile(user.id);
+    if (profile && profile.onboarding_done) {
+      window.location.href = 'app.html';
+    } else {
+      window.location.href = 'onboarding.html';
+    }
+  } catch {
+    window.location.href = 'onboarding.html';
+  }
+}
+
+document.getElementById('magic-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  if (!email) return;
+  const btn = document.getElementById('magic-btn');
+  btn.disabled = true;
+  authMsg.textContent = 'Enviando...';
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: { emailRedirectTo: window.location.origin + window.location.pathname },
+  });
+  btn.disabled = false;
+  if (error) {
+    authMsg.textContent = 'No se pudo enviar el enlace. Intentalo de nuevo.';
+    toast(error.message);
+  } else {
+    authMsg.textContent = 'Revisa tu correo y toca el enlace para entrar.';
+  }
+});
+
+document.getElementById('google-btn').addEventListener('click', async () => {
+  await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + window.location.pathname },
+  });
+});
+
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  await supabase.auth.signOut();
+  signedIn.classList.add('hidden');
+  signedOut.classList.remove('hidden');
+});
+
+document.getElementById('continue-btn').addEventListener('click', async () => {
+  const session = await getSession();
+  if (session) goToApp(session.user);
+});
+
+supabase.auth.onAuthStateChange((_event, session) => {
+  if (session) {
+    signedOut.classList.add('hidden');
+    signedIn.classList.remove('hidden');
+  }
+});
+
+routeIfSignedIn();
+</script>
+</body>
+</html>
