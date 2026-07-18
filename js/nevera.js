@@ -1,5 +1,4 @@
 import { supabase, requireAuth } from './supabase-client.js';
-import { WORKER_URL } from './config.js';
 import { toast, escapeHtml, compressImageToDataUrl, parseAiJson } from './utils.js';
 
 const $ = (sel) => document.querySelector(sel);
@@ -42,13 +41,12 @@ async function analyzePhoto() {
   $('#analyze-status').textContent = 'Analizando...';
 
   try {
-    if (!WORKER_URL || WORKER_URL.includes('YOUR-WORKER')) throw new Error('Worker no configurado');
-    const res = await fetch(`${WORKER_URL}/nevera`, {
+    const res = await fetch('/api/nevera', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ image: capturedDataUrl }),
     });
-    if (!res.ok) throw new Error('worker ' + res.status);
+    if (!res.ok) throw new Error('api/nevera ' + res.status);
     const raw = await res.text();
     const parsed = parseAiJson(raw);
     if (!parsed || !Array.isArray(parsed.ingredientes)) throw new Error('respuesta invalida');
