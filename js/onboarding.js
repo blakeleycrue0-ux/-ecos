@@ -46,6 +46,45 @@ async function init() {
   $('#hate-add').addEventListener('click', () => addFree('hate-input', 'grid-odiados', state.odiados));
   $('#back-step').addEventListener('click', prevStep);
   $('#ob-form').addEventListener('submit', onSubmit);
+
+  const { data: existing } = await supabase.from('taste_profile').select('*').eq('user_id', user.id).maybeSingle();
+  if (existing) prefillFromExisting(existing);
+}
+
+function prefillFromExisting(existing) {
+  prefillMulti('grid-cocinas', existing.cocinas, state.cocinas);
+  prefillMulti('grid-favoritos', existing.ingredientes_favoritos, state.favoritos);
+  prefillMulti('grid-odiados', existing.ingredientes_odiados, state.odiados);
+  prefillSingle('grid-nivel', NIVELES, existing.nivel, (v) => state.nivel = v);
+  prefillSingle('grid-tiempo', TIEMPOS, existing.tiempo_habitual, (v) => state.tiempo = v);
+}
+
+function prefillMulti(gridId, values, set) {
+  if (!Array.isArray(values) || values.length === 0) return;
+  const grid = $('#' + gridId);
+  for (const val of values) {
+    const existingBtn = [...grid.querySelectorAll('.choice-card')].find((b) => b.textContent.toLowerCase() === val.toLowerCase());
+    if (existingBtn) {
+      set.add(existingBtn.textContent);
+      existingBtn.classList.add('selected');
+    } else {
+      addChoiceCard(grid, val, set);
+      set.add(val);
+      grid.lastElementChild.classList.add('selected');
+    }
+  }
+}
+
+function prefillSingle(gridId, options, value, onSelect) {
+  if (value == null) return;
+  const idx = options.findIndex((o) => o.v === value);
+  if (idx === -1) return;
+  const grid = $('#' + gridId);
+  const btn = grid.children[idx];
+  if (btn) {
+    btn.classList.add('selected');
+    onSelect(value);
+  }
 }
 
 function renderChoiceGrid(gridId, options, set) {
