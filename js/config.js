@@ -6,5 +6,5 @@
 // vive como variable de entorno de Netlify, leida solo por las
 // Netlify Functions en netlify/functions/.
 
-export const SUPABASE_URL = 'https://YOUR-PROJECT.supabase.co';
-export const SUPABASE_ANON_KEY = 'YOUR-SUPABASE-ANON-KEY';
+export const SUPABASE_URL = 'https://sptlphwwjluvvaakeumb.supabase.co';
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwdGxwaHd3amx1dnZhYWtldW1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyMDk2NzUsImV4cCI6MjA5OTc4NTY3NX0.ZP6UiHEzDb_VH2glsF8w17PwDmvb4qbinD6xNO5vHLs';
