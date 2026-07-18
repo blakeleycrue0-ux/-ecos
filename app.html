@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nappe</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  html, body { overflow: hidden; }
+  #feed {
+    height: 100vh; height: 100dvh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+  }
+  #feed::-webkit-scrollbar { display: none; }
+
+  .card {
+    position: relative;
+    height: 100vh; height: 100dvh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    background: var(--bg-raised);
+  }
+  .card .media { position: absolute; inset: 0; }
+  .card .media img, .card .media video { width: 100%; height: 100%; object-fit: cover; }
+  .card .scrim {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0.45) 100%);
+  }
+  .card .info {
+    position: relative;
+    padding: 0 20px calc(110px + env(safe-area-inset-bottom)) 20px;
+    color: var(--fg);
+  }
+  .card .info h2 { font-size: 2rem; margin-bottom: 10px; }
+  .card .info .meta-row { color: #d8d4c8; }
+  .card .info .tag { border-color: rgba(244,241,232,0.4); color: #e8e5db; margin-right: 6px; }
+
+  .card .actions {
+    position: absolute;
+    right: 14px;
+    bottom: calc(120px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 3;
+  }
+  .card .actions button {
+    width: 52px; height: 52px; border-radius: 50%;
+    border: 1px solid rgba(244,241,232,0.5);
+    background: rgba(11,11,10,0.55);
+    color: var(--fg);
+    font-size: 1.25rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card .actions button.save.active { color: var(--accent); border-color: var(--accent); }
+  .card .actions .lbl { display:block; font-size:0.6rem; text-align:center; margin-top:4px; text-transform:uppercase; color:#d8d4c8; }
+
+  .tabbar-overlay {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0));
+    padding-top: 30px;
+  }
+  .tabbar-overlay .tabbar { border-top: none; background: transparent; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .tabbar-overlay .tabbar a { color: rgba(244,241,232,0.65); }
+  .tabbar-overlay .tabbar a.active { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div id="feed"></div>
+
+<div class="empty-state hidden" id="empty-state" style="position:fixed; inset:0; align-items:center;">
+  <p>Todavia no hay recetas publicadas. Vuelve pronto.</p>
+</div>
+
+<div class="center" id="loading-state" style="position:fixed; inset:0;">
+  <div class="spinner"></div>
+</div>
+
+<div class="tabbar-overlay">
+  <nav class="tabbar">
+    <a href="app.html" class="active">Feed</a>
+    <a href="nevera.html">Nevera</a>
+    <a href="guardadas.html">Guardadas</a>
+  </nav>
+</div>
+
+<script type="module" src="js/feed.js"></script>
+</body>
+</html>

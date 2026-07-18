@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nappe — Nevera</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .capture-box {
+    border: 1px dashed var(--line);
+    border-radius: var(--radius);
+    aspect-ratio: 4/3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--fg-faint);
+    overflow: hidden;
+    position: relative;
+    background: var(--bg-raised);
+  }
+  .capture-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .capture-box .hint { position: relative; z-index: 1; text-align: center; padding: 0 20px; }
+  .chip-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: var(--edge); border-radius: 999px; padding: 8px 8px 8px 14px;
+    font-size: 0.85rem; background: var(--bg-raised);
+  }
+  .chip button { background: none; border: none; color: var(--fg-faint); font-size: 1rem; padding: 0 6px; }
+  .add-chip-row { display: flex; gap: 8px; margin-bottom: 6px; }
+  .add-chip-row input { flex: 1; padding: 12px; background: var(--bg-input); border: var(--edge); border-radius: var(--radius); color: var(--fg); }
+
+  .match-row { display: flex; gap: 12px; padding: 14px 0; border-bottom: var(--edge); cursor: pointer; }
+  .match-row img { width: 64px; height: 64px; object-fit: cover; background: var(--bg-raised); border: var(--edge); flex-shrink: 0; }
+  .match-row .info { flex: 1; min-width: 0; }
+  .match-row .info strong { display: block; font-family: var(--font-display); text-transform: uppercase; }
+  .match-pct { font-family: var(--font-display); color: var(--accent); font-size: 1.1rem; flex-shrink: 0; }
+  .missing { font-size: 0.75rem; color: var(--fg-faint); margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="topbar">
+    <span class="brand">Nevera</span>
+  </div>
+
+  <div class="wrap grow" style="padding: 20px 20px 20px;">
+
+    <!-- PASO 1: captura -->
+    <div id="capture-step">
+      <p>Haz una foto de tu nevera o despensa y te diremos que puedes cocinar.</p>
+      <label class="capture-box" id="capture-box">
+        <span class="hint" id="capture-hint">Toca para hacer una foto</span>
+        <img id="capture-preview" class="hidden">
+        <input type="file" accept="image/*" capture="environment" id="file-input" style="display:none;">
+      </label>
+      <button class="btn btn-primary" id="analyze-btn" style="margin-top:16px;" disabled>Analizar foto</button>
+      <p id="analyze-status" style="font-size:0.82rem; margin-top:10px;"></p>
+    </div>
+
+    <!-- PASO 2: edicion de ingredientes -->
+    <div id="edit-step" class="hidden">
+      <h3>Ingredientes detectados</h3>
+      <p>Revisa la lista, quita lo que no cuadre o añade lo que falte.</p>
+      <div class="chip-list" id="chip-list"></div>
+      <div class="add-chip-row">
+        <input type="text" id="new-ing-input" placeholder="Añadir ingrediente...">
+        <button class="btn btn-ghost btn-sm" id="add-ing-btn">Añadir</button>
+      </div>
+      <button class="btn btn-primary" id="search-btn" style="margin-top:14px;">Buscar recetas</button>
+      <button class="btn btn-ghost" id="retake-btn" style="margin-top:10px;">Repetir foto</button>
+    </div>
+
+    <!-- PASO 3: resultados -->
+    <div id="results-step" class="hidden">
+      <h3>Recetas segun tu nevera</h3>
+      <div id="results-list"></div>
+      <div id="results-empty" class="empty-state hidden"><p>Ninguna receta encaja todavia con estos ingredientes.</p></div>
+      <button class="btn btn-ghost" id="back-to-edit-btn" style="margin-top:16px;">Editar ingredientes</button>
+    </div>
+
+  </div>
+
+  <nav class="tabbar">
+    <a href="app.html">Feed</a>
+    <a href="nevera.html" class="active">Nevera</a>
+    <a href="guardadas.html">Guardadas</a>
+  </nav>
+</div>
+
+<script type="module" src="js/nevera.js"></script>
+</body>
+</html>

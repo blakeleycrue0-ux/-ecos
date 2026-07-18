@@ -1,0 +1,12 @@
+name = "nappe-worker"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+# CORS: solo se permiten peticiones desde tu dominio de Netlify.
+# Cambia este valor por tu URL real antes de desplegar, o añade
+# varios origenes separados por coma (ver src/index.js).
+[vars]
+ALLOWED_ORIGIN = "https://YOUR-SITE.netlify.app"
+
+# El secret NUNCA va aqui. Despues de crear el worker, ejecuta:
+#   wrangler secret put ANTHROPIC_API_KEY
