@@ -29,15 +29,33 @@
     background-size: cover;
     background-position: center;
     position: relative;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    transform-origin: center;
   }
 
-  #google-hit {
+  .ob-hit {
     position: absolute;
-    left: 11%; width: 78%;
-    top: 69%; height: 8.5%;
     background: transparent;
     border: none;
   }
+
+  .ob-dots {
+    position: fixed;
+    top: calc(16px + env(safe-area-inset-top));
+    left: 0; right: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    pointer-events: none;
+  }
+  .ob-dots span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(15,46,29,0.22);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.5);
+    transition: all 0.3s cubic-bezier(.2,.8,.2,1);
+  }
+  .ob-dots span.active { background: #1E6B41; width: 20px; border-radius: 100px; }
 </style>
 </head>
 <body>
@@ -52,19 +70,84 @@
   <div class="bar"><i></i></div>
 </div>
 
+<div class="ob-dots" id="ob-dots"></div>
+
 <div id="ob-carousel">
-  <div class="ob-slide" style="background-image:url('img/onboarding/welcome.jpg');"></div>
-  <div class="ob-slide" style="background-image:url('img/onboarding/nevera.jpg');"></div>
-  <div class="ob-slide" style="background-image:url('img/onboarding/cocina.jpg');"></div>
-  <div class="ob-slide" style="background-image:url('img/onboarding/feed.jpg');"></div>
-  <div class="ob-slide" style="background-image:url('img/onboarding/login.jpg');">
-    <button type="button" id="google-hit" aria-label="Continuar con Google"></button>
+  <div class="ob-slide" data-img="img/onboarding/welcome.jpg"></div>
+  <div class="ob-slide" data-img="img/onboarding/nevera.jpg"></div>
+  <div class="ob-slide" data-img="img/onboarding/cocina.jpg"></div>
+  <div class="ob-slide" data-img="img/onboarding/feed.jpg"></div>
+  <div class="ob-slide" data-img="img/onboarding/login.jpg" id="login-slide">
+    <button type="button" class="ob-hit" id="google-hit" aria-label="Continuar con Google"></button>
+    <button type="button" class="ob-hit" id="email-hit" aria-label="Continuar con email"></button>
   </div>
 </div>
 
 <script type="module">
 import { supabase, getSession, getProfile } from './js/supabase-client.js';
 import { toast } from './js/utils.js';
+
+const carousel = document.getElementById('ob-carousel');
+const slides = [...carousel.querySelectorAll('.ob-slide')];
+const dotsWrap = document.getElementById('ob-dots');
+
+slides.forEach((s) => { s.style.backgroundImage = `url('${s.dataset.img}')`; });
+
+// puntos de progreso
+slides.forEach((_, i) => {
+  const d = document.createElement('span');
+  if (i === 0) d.classList.add('active');
+  dotsWrap.appendChild(d);
+});
+const dots = [...dotsWrap.children];
+
+function updateFromScroll() {
+  const width = carousel.clientWidth;
+  const idx = Math.round(carousel.scrollLeft / width);
+  dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+  slides.forEach((s) => {
+    const rect = s.getBoundingClientRect();
+    const dist = Math.abs(rect.left) / width;
+    const scale = Math.max(0.94, 1 - dist * 0.06);
+    const opacity = Math.max(0.75, 1 - dist * 0.25);
+    s.style.transform = `scale(${scale})`;
+    s.style.opacity = opacity;
+  });
+}
+carousel.addEventListener('scroll', () => window.requestAnimationFrame(updateFromScroll), { passive: true });
+updateFromScroll();
+
+// posiciona los botones invisibles exactamente sobre donde caen en la
+// imagen real (matematica identica a background-size:cover), para que
+// el hueco pulsable coincida siempre con el boton dibujado en la foto,
+// sea cual sea el tamano de pantalla.
+function placeHit(el, img, container, frac) {
+  const cw = container.clientWidth, ch = container.clientHeight;
+  const iw = img.naturalWidth, ih = img.naturalHeight;
+  const scale = Math.max(cw / iw, ch / ih);
+  const dw = iw * scale, dh = ih * scale;
+  const offsetX = (cw - dw) / 2;
+  const offsetY = (ch - dh) / 2;
+  el.style.left = (offsetX + frac.left * dw) + 'px';
+  el.style.top = (offsetY + frac.top * dh) + 'px';
+  el.style.width = (frac.width * dw) + 'px';
+  el.style.height = (frac.height * dh) + 'px';
+}
+
+function setupLoginHits() {
+  const loginSlide = document.getElementById('login-slide');
+  const img = new Image();
+  img.onload = () => {
+    const place = () => {
+      placeHit(document.getElementById('google-hit'), img, loginSlide, { top: 0.699, left: 0.117, width: 0.768, height: 0.077 });
+      placeHit(document.getElementById('email-hit'), img, loginSlide, { top: 0.839, left: 0.123, width: 0.762, height: 0.077 });
+    };
+    place();
+    window.addEventListener('resize', place);
+  };
+  img.src = loginSlide.dataset.img;
+}
+setupLoginHits();
 
 async function goToApp(user) {
   try {
@@ -85,6 +168,16 @@ document.getElementById('google-hit').addEventListener('click', async () => {
     options: { redirectTo: window.location.origin + window.location.pathname },
   });
   if (error) toast(error.message);
+});
+
+document.getElementById('email-hit').addEventListener('click', async () => {
+  const email = window.prompt('Tu email:');
+  if (!email) return;
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: { emailRedirectTo: window.location.origin + window.location.pathname },
+  });
+  toast(error ? error.message : 'Revisa tu correo para el enlace de acceso.');
 });
 
 supabase.auth.onAuthStateChange((_event, session) => {
