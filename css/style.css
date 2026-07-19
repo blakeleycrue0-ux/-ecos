@@ -1,25 +1,25 @@
 /* ===========================================================
    Nappe — hoja de estilos unica
-   App moderna y amable: fondo gris muy suave, tarjetas blancas
+   Editorial de cocina calida: fondo crema, tarjetas blancas
    con esquinas redondeadas y elevacion ligera, botones en
-   pildora, tipografia del sistema en negrita, verde fresco como
+   pildora, tipografia del sistema en negrita, verde bosque como
    acento. Sin fuentes externas, sin emojis. Movil primero.
    =========================================================== */
 
 :root {
-  --bg: #F2F3F6;
-  --bg-raised: #FFFFFF;
-  --bg-input: #F5F6F9;
-  --line: #E7E8EE;
-  --fg: #14171C;
-  --fg-dim: #5B6270;
-  --fg-faint: #9AA1AC;
-  --accent: #1B9E5B;
-  --accent-tint: #E3F5EA;
+  --bg: #F7F2E7;
+  --bg-raised: #FFFDF8;
+  --bg-input: #F0E8D8;
+  --line: #E7DCC6;
+  --fg: #1C2A20;
+  --fg-dim: #5C6459;
+  --fg-faint: #99A08F;
+  --accent: #1E4430;
+  --accent-tint: #DEEADF;
   --accent-fg: #FFFFFF;
-  --danger: #DC4B3F;
-  --danger-tint: #FBE7E4;
-  --ok: #1B9E5B;
+  --danger: #B3452F;
+  --danger-tint: #F5E1D8;
+  --ok: #1E4430;
 
   --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -27,7 +27,7 @@
   --radius: 16px;
   --radius-sm: 10px;
   --radius-pill: 999px;
-  --shadow: 0 1px 2px rgba(20,23,28,0.05), 0 4px 14px -6px rgba(20,23,28,0.10);
+  --shadow: 0 1px 2px rgba(40,30,10,0.06), 0 4px 14px -6px rgba(40,30,10,0.14);
   --edge: 1px solid var(--line);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -374,12 +374,6 @@ button { cursor: pointer; }
   50% { transform: translateY(-6px) rotate(-2deg); }
 }
 
-@keyframes steamRise {
-  0% { opacity: 0; transform: translateY(4px) scaleY(0.8); }
-  30% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-10px) scaleY(1.1); }
-}
-
 @keyframes shimmer {
   0% { background-position: -200px 0; }
   100% { background-position: 200px 0; }
@@ -399,13 +393,6 @@ button { cursor: pointer; }
 .stagger > *:nth-child(7) { animation-delay: 0.26s; }
 .stagger > *:nth-child(8) { animation-delay: 0.30s; }
 
-/* ---------- mascota ---------- */
-
-.mascot { display: block; margin: 0 auto; }
-.mascot .steam { transform-origin: bottom center; animation: steamRise 2.4s ease-in-out infinite; }
-.mascot .steam.s2 { animation-delay: 0.4s; }
-.mascot .steam.s3 { animation-delay: 0.8s; }
-.mascot .body { animation: float 3.6s ease-in-out infinite; transform-origin: center; }
 
 .empty-state {
   flex: 1;
@@ -482,3 +469,82 @@ button { cursor: pointer; }
   animation: float 3.6s ease-in-out infinite;
 }
 .feature-badge svg { width: 40px; height: 40px; stroke: var(--accent); }
+
+/* ---------- logo lockup ---------- */
+
+.logo-lockup {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 2px;
+}
+.logo-lockup .wordmark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+.logo-lockup .hat {
+  stroke: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ---------- botones con flecha ---------- */
+
+.btn-arrow {
+  position: relative;
+  padding-right: 52px;
+}
+.btn-arrow .arrow {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- panel artistico (carrusel) ---------- */
+
+.art-panel {
+  position: relative;
+  width: 100%;
+  border-radius: 28px 28px 0 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(120% 90% at 15% 10%, rgba(30,68,48,0.14) 0%, transparent 55%),
+    radial-gradient(100% 80% at 90% 100%, rgba(30,68,48,0.18) 0%, transparent 60%),
+    var(--accent-tint);
+}
+.art-panel svg.art-icon {
+  width: 34%;
+  max-width: 150px;
+  stroke: var(--accent);
+}
+.art-panel .art-blob {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.info-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-raised);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 12px 16px;
+  text-align: left;
+  animation: fadeInUp 0.4s cubic-bezier(.2,.8,.2,1) both;
+}
+.info-chip .ic {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: var(--accent-tint); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.info-chip .ic svg { width: 18px; height: 18px; stroke: var(--accent); }
+.info-chip strong { display: block; font-size: 0.85rem; }
+.info-chip span { font-size: 0.78rem; color: var(--fg-faint); }
