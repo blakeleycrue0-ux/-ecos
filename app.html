@@ -57,8 +57,12 @@
     color: #F7F2E5;
     font-size: 1.25rem;
     display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s cubic-bezier(.34,1.56,.64,1);
   }
-  .card .actions button.save.active { color: var(--accent); border-color: var(--accent); }
+  .card .actions button:active { transform: scale(0.85); }
+  .card .actions button.save.active { color: var(--accent); border-color: var(--accent); animation: popIn 0.35s cubic-bezier(.34,1.56,.64,1); }
+  .card .info h2, .card .info .meta-row, .card .info .tag { animation: fadeInUp 0.5s cubic-bezier(.2,.8,.2,1) both; }
+  .card .info .meta-row { animation-delay: 0.06s; }
   .card .actions .lbl { display:block; font-size:0.62rem; font-weight:600; text-align:center; margin-top:4px; color:#d8d4c8; }
 
   .tabbar-overlay {

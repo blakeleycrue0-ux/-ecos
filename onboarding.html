@@ -9,7 +9,8 @@
   .ob-top { padding: calc(18px + env(safe-area-inset-top)) 20px 10px; display: flex; align-items: center; gap: 14px; }
   .ob-top .progress-dots { flex: 1; }
   .ob-step { display: none; flex-direction: column; flex: 1; padding: 10px 20px 24px; }
-  .ob-step.active { display: flex; }
+  .ob-step.active { display: flex; animation: stepIn 0.4s cubic-bezier(.2,.8,.2,1) both; }
+  #next-btn { transition: transform 0.15s cubic-bezier(.2,.8,.2,1); }
   .ob-question { margin: 10px 0 22px; }
   .free-add { display: flex; gap: 8px; margin: 16px 0 10px; }
   .free-add input { flex: 1; padding: 14px 16px; background: var(--bg-input); border: 1px solid transparent; border-radius: var(--radius-sm); color: var(--fg); }

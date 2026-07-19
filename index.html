@@ -7,43 +7,118 @@
 <meta name="description" content="Recetas a tu punto. Feed personalizado y escaneo de nevera.">
 <meta name="theme-color" content="#F2F3F6">
 <link rel="stylesheet" href="css/style.css">
+<style>
+  .brand-top { text-align: center; padding: calc(28px + env(safe-area-inset-top)) 0 8px; }
+  .brand-top h1 { font-size: 1.7rem; color: var(--accent); margin: 0; }
+
+  #ob-carousel { flex: 1; }
+  .ob-slide { justify-content: center; padding-bottom: 20px; }
+  .ob-slide h2 { font-size: 1.55rem; margin-bottom: 10px; }
+  .ob-slide p { max-width: 320px; margin: 0 auto; }
+
+  .auth-card {
+    width: 100%; background: var(--bg-raised); border-radius: 24px;
+    box-shadow: var(--shadow); padding: 30px 24px; text-align: left;
+    animation: fadeInUp 0.4s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .auth-card h2 { font-size: 1.4rem; margin-bottom: 6px; }
+  .auth-card p { font-size: 0.92rem; margin-bottom: 26px; }
+
+  .bottom-nav { padding: 0 20px calc(20px + env(safe-area-inset-bottom)); }
+  .bottom-nav.hidden { display: none; }
+</style>
 </head>
 <body>
 <div class="screen">
-  <div class="wrap grow center" style="padding-top: calc(64px + env(safe-area-inset-top)); padding-bottom: 40px;">
 
-    <div style="margin-bottom: 28px;">
-      <h1 style="font-size: 2.2rem; margin-bottom: 0;">Nappe</h1>
+  <div class="brand-top"><h1>Nappe</h1></div>
+
+  <div id="intro-flow" class="grow" style="display:flex; flex-direction:column;">
+    <div class="ob-carousel wrap" id="ob-carousel">
+
+      <div class="ob-slide">
+        <svg class="mascot" width="128" height="128" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:22px;">
+          <path class="steam s1" d="M60 38c-6 8 6 12 0 20" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>
+          <path class="steam s2" d="M80 30c-6 8 6 12 0 20" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>
+          <path class="steam s3" d="M100 38c-6 8 6 12 0 20" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>
+          <g class="body">
+            <rect x="30" y="70" width="100" height="62" rx="20" fill="var(--accent-tint)"/>
+            <rect x="30" y="70" width="100" height="62" rx="20" stroke="var(--accent)" stroke-width="4"/>
+            <path d="M30 90c-14 0-14 20 0 20" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M130 90c14 0 14 20 0 20" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <circle cx="65" cy="98" r="5" fill="var(--fg)"/>
+            <circle cx="95" cy="98" r="5" fill="var(--fg)"/>
+            <path d="M68 112c6 8 18 8 24 0" stroke="var(--fg)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <circle cx="55" cy="106" r="5" fill="#FF9E9E" opacity="0.5"/>
+            <circle cx="105" cy="106" r="5" fill="#FF9E9E" opacity="0.5"/>
+          </g>
+        </svg>
+        <h2>Bienvenido a Nappe</h2>
+        <p>Tu cocina, mas facil. Recetas a tu gusto y una ayudita cuando no sabes que hacer de comer.</p>
+      </div>
+
+      <div class="ob-slide">
+        <div class="feature-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="5" y1="10" x2="19" y2="10"/><line x1="8" y1="5" x2="8" y2="7"/><line x1="8" y1="13" x2="8" y2="15"/></svg>
+        </div>
+        <h2>Escanea tu nevera</h2>
+        <p>Haz una foto de lo que tienes y te decimos que puedes cocinar hoy mismo.</p>
+      </div>
+
+      <div class="ob-slide">
+        <div class="feature-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M9 11v11"/><path d="M17 2c-1.5 0-3 1.5-3 4v3c0 1.5.5 2 2 2v10"/></svg>
+        </div>
+        <h2>Un feed hecho para ti</h2>
+        <p>Cuentanos que te gusta y te iremos proponiendo recetas a tu medida.</p>
+      </div>
+
+      <div class="ob-slide">
+        <div class="feature-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M6 4l2 3M18 4l-2 3"/><path d="M4 12a8 8 0 0 1 16 0Z"/><path d="M4 12h16v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/></svg>
+        </div>
+        <h2>Modo cocina paso a paso</h2>
+        <p>Temporizadores y pasos claros, uno a uno, sin liarte con el movil lleno de aceite.</p>
+      </div>
+
+      <div class="ob-slide" id="login-slide">
+        <div id="auth-view" class="auth-card">
+
+          <div id="signed-out">
+            <h2>Entra en Nappe</h2>
+            <p>Tu feed de recetas, a tu gusto. Escanea tu nevera y descubre que cocinar hoy.</p>
+
+            <button type="button" class="btn" id="google-btn" style="background:#111318; color:#fff; box-shadow:none; display:flex; align-items:center; justify-content:center; gap:10px;">
+              <svg width="19" height="19" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+                <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+                <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+                <path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/>
+                <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+              </svg>
+              Continuar con Google
+            </button>
+
+            <p id="auth-msg" style="margin-top: 18px; font-size: 0.85rem; min-height: 1.2em; text-align: center;"></p>
+          </div>
+
+          <div id="signed-in" class="hidden">
+            <h2>Sesion iniciada</h2>
+            <p>Ya puedes continuar.</p>
+            <button type="button" class="btn btn-primary" id="continue-btn">Continuar</button>
+            <button type="button" class="btn btn-ghost" id="logout-btn" style="margin-top: 12px;">Cerrar sesion</button>
+          </div>
+
+        </div>
+      </div>
+
     </div>
 
-    <div id="auth-view" style="width: 100%; background: var(--bg-raised); border-radius: 24px; box-shadow: var(--shadow); padding: 30px 24px;">
-
-      <div id="signed-out">
-        <h2 style="font-size: 1.4rem; margin-bottom: 6px;">Entra en Nappe</h2>
-        <p style="font-size: 0.92rem; margin-bottom: 26px;">Tu feed de recetas, a tu gusto. Escanea tu nevera y descubre que cocinar hoy.</p>
-
-        <button type="button" class="btn" id="google-btn" style="background:#111318; color:#fff; box-shadow:none; display:flex; align-items:center; justify-content:center; gap:10px;">
-          <svg width="19" height="19" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
-            <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
-            <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
-            <path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/>
-            <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
-          </svg>
-          Continuar con Google
-        </button>
-
-        <p id="auth-msg" style="margin-top: 18px; font-size: 0.85rem; min-height: 1.2em; text-align: center;"></p>
-      </div>
-
-      <div id="signed-in" class="hidden">
-        <h2 style="font-size: 1.4rem; margin-bottom: 6px;">Sesion iniciada</h2>
-        <p style="font-size: 0.92rem; margin-bottom: 22px;">Ya puedes continuar.</p>
-        <button type="button" class="btn btn-primary" id="continue-btn">Continuar</button>
-        <button type="button" class="btn btn-ghost" id="logout-btn" style="margin-top: 12px;">Cerrar sesion</button>
-      </div>
-
+    <div class="bottom-nav wrap" id="bottom-nav">
+      <div class="carousel-dots" id="carousel-dots"></div>
+      <button type="button" class="btn btn-primary" id="carousel-next">Siguiente</button>
     </div>
   </div>
+
 </div>
 
 <script type="module">
@@ -53,12 +128,60 @@ import { toast } from './js/utils.js';
 const signedOut = document.getElementById('signed-out');
 const signedIn = document.getElementById('signed-in');
 const authMsg = document.getElementById('auth-msg');
+const carousel = document.getElementById('ob-carousel');
+const slides = [...carousel.querySelectorAll('.ob-slide')];
+const dotsWrap = document.getElementById('carousel-dots');
+const nextBtn = document.getElementById('carousel-next');
+const bottomNav = document.getElementById('bottom-nav');
+const introFlow = document.getElementById('intro-flow');
+
+let activeSlide = 0;
+
+function buildDots() {
+  dotsWrap.innerHTML = '';
+  slides.forEach((_, i) => {
+    const d = document.createElement('span');
+    if (i === activeSlide) d.classList.add('active');
+    dotsWrap.appendChild(d);
+  });
+}
+
+function goToSlide(i) {
+  slides[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+}
+
+function updateActiveFromScroll() {
+  const width = carousel.clientWidth;
+  const idx = Math.round(carousel.scrollLeft / width);
+  if (idx === activeSlide) return;
+  activeSlide = Math.max(0, Math.min(slides.length - 1, idx));
+  buildDots();
+  bottomNav.classList.toggle('hidden', activeSlide === slides.length - 1);
+}
+
+carousel.addEventListener('scroll', () => {
+  window.requestAnimationFrame(updateActiveFromScroll);
+}, { passive: true });
+
+nextBtn.addEventListener('click', () => {
+  if (activeSlide < slides.length - 1) goToSlide(activeSlide + 1);
+});
+
+buildDots();
+
+function showOnlyLogin() {
+  introFlow.style.display = 'flex';
+  bottomNav.classList.add('hidden');
+  goToSlide(slides.length - 1);
+  carousel.style.overflowX = 'hidden';
+}
 
 async function routeIfSignedIn() {
   const session = await getSession();
   if (!session) return;
   signedOut.classList.add('hidden');
   signedIn.classList.remove('hidden');
+  showOnlyLogin();
   return session;
 }
 
@@ -101,6 +224,7 @@ supabase.auth.onAuthStateChange((_event, session) => {
   if (session) {
     signedOut.classList.add('hidden');
     signedIn.classList.remove('hidden');
+    showOnlyLogin();
   }
 });
 
