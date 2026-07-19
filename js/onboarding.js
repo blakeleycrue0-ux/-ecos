@@ -63,7 +63,7 @@ function prefillMulti(gridId, values, set) {
   if (!Array.isArray(values) || values.length === 0) return;
   const grid = $('#' + gridId);
   for (const val of values) {
-    const existingBtn = [...grid.querySelectorAll('.choice-card')].find((b) => b.textContent.toLowerCase() === val.toLowerCase());
+    const existingBtn = [...grid.querySelectorAll('.chip-opt')].find((b) => b.textContent.toLowerCase() === val.toLowerCase());
     if (existingBtn) {
       set.add(existingBtn.textContent);
       existingBtn.classList.add('selected');
@@ -95,7 +95,7 @@ function renderChoiceGrid(gridId, options, set) {
 function addChoiceCard(grid, label, set) {
   const btn = document.createElement('button');
   btn.type = 'button';
-  btn.className = 'choice-card';
+  btn.className = 'chip-opt';
   btn.textContent = label;
   btn.addEventListener('click', () => {
     if (set.has(label)) { set.delete(label); btn.classList.remove('selected'); }

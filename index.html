@@ -36,6 +36,17 @@
 </style>
 </head>
 <body>
+
+<div id="splash">
+  <span class="logo-lockup">
+    <span class="wordmark">Nappe</span>
+    <svg class="hat" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 24c-3 0-5-2.2-5-5s2-5 5-5c.4-3 3-5.3 6-5.3s5.6 2.3 6 5.3c2.6 0 4.8 1.9 5 4.4.1 2.8-2.1 5.1-5 5.1H9Z" stroke-width="2.2" stroke-linejoin="round"/>
+    </svg>
+  </span>
+  <div class="bar"><i></i></div>
+</div>
+
 <div class="screen">
 
   <div class="brand-top">
@@ -254,7 +265,12 @@ supabase.auth.onAuthStateChange((_event, session) => {
   }
 });
 
-routeIfSignedIn();
+const minSplash = new Promise((r) => setTimeout(r, 900));
+Promise.all([routeIfSignedIn(), minSplash]).then(() => {
+  const splash = document.getElementById('splash');
+  splash.classList.add('out');
+  setTimeout(() => splash.remove(), 450);
+});
 </script>
 </body>
 </html>

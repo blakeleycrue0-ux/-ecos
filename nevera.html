@@ -27,15 +27,15 @@
   .chip-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
   .chip {
     display: inline-flex; align-items: center; gap: 6px;
-    border: none; border-radius: var(--radius-pill); padding: 9px 9px 9px 15px;
-    font-size: 0.85rem; font-weight: 600; background: var(--bg-raised); box-shadow: var(--shadow);
+    border: var(--edge); border-radius: var(--radius-pill); padding: 9px 9px 9px 15px;
+    font-size: 0.85rem; font-weight: 600; background: var(--bg-raised);
     animation: popIn 0.3s cubic-bezier(.34,1.56,.64,1) both;
   }
   .chip button { background: none; border: none; color: var(--fg-faint); font-size: 1rem; padding: 0 6px; }
   .add-chip-row { display: flex; gap: 8px; margin-bottom: 6px; }
   .add-chip-row input { flex: 1; padding: 14px 16px; background: var(--bg-input); border: 1px solid transparent; border-radius: var(--radius-sm); color: var(--fg); }
 
-  .match-row { display: flex; gap: 12px; padding: 14px; margin-bottom: 10px; background: var(--bg-raised); border-radius: var(--radius); box-shadow: var(--shadow); cursor: pointer; animation: fadeInUp 0.4s cubic-bezier(.2,.8,.2,1) both; transition: transform 0.15s ease; }
+  .match-row { display: flex; gap: 12px; padding: 14px; margin-bottom: 10px; background: var(--bg-raised); border: var(--edge); border-radius: var(--radius); cursor: pointer; animation: fadeInUp 0.4s cubic-bezier(.2,.8,.2,1) both; transition: transform 0.15s ease; }
   .match-row:active { transform: scale(0.98); }
   #results-list .match-row:nth-child(1) { animation-delay: 0.03s; }
   #results-list .match-row:nth-child(2) { animation-delay: 0.07s; }

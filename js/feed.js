@@ -10,6 +10,14 @@ let savedIds = new Set();
 let observer = null;
 let loggedViews = new Set();
 
+function setGreeting(profile) {
+  const h = new Date().getHours();
+  const greet = h < 13 ? 'Buenos dias' : h < 21 ? 'Buenas tardes' : 'Buenas noches';
+  $('#greet-h').textContent = greet;
+  const initial = (profile?.username || user.email || 'N').trim().charAt(0).toUpperCase();
+  $('#avatar').textContent = initial;
+}
+
 async function init() {
   user = await requireAuth();
   if (!user) return;
@@ -19,6 +27,7 @@ async function init() {
     window.location.href = 'onboarding.html';
     return;
   }
+  setGreeting(profile);
 
   const [{ data: allRecipes, error: rErr }, { data: taste }, { data: saves }] = await Promise.all([
     supabase.from('recipes').select('id,titulo,imagen_url,video_url,minutos,dificultad,raciones,cocina,tags,kcal').eq('publicada', true),
@@ -144,62 +153,59 @@ function localOrder(recipesList, taste) {
 
 function renderFeed() {
   feedEl.innerHTML = '';
-  observer = new IntersectionObserver(onIntersect, { root: feedEl, threshold: 0.6 });
+  observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
 
-  for (const r of recipes) {
-    const card = buildCard(r);
+  recipes.forEach((r, i) => {
+    const card = buildCard(r, i);
     feedEl.appendChild(card);
     observer.observe(card);
-  }
+  });
 }
 
-function buildCard(r) {
+function buildCard(r, i) {
   const card = document.createElement('div');
-  card.className = 'card';
+  card.className = 'recipe-card';
   card.dataset.id = r.id;
+  card.style.animationDelay = `${Math.min(i * 0.05, 0.4)}s`;
 
-  const media = document.createElement('div');
-  media.className = 'media';
+  const ph = document.createElement('div');
+  ph.className = 'ph';
   if (r.imagen_url) {
     const img = document.createElement('img');
     img.src = r.imagen_url;
     img.loading = 'lazy';
     img.alt = r.titulo;
-    media.appendChild(img);
+    ph.appendChild(img);
   }
-  card.appendChild(media);
+  const tag = document.createElement('span');
+  tag.className = 'tag';
+  tag.textContent = (r.tags || [])[0] || dificultadLabel(r.dificultad);
+  ph.appendChild(tag);
 
-  const scrim = document.createElement('div');
-  scrim.className = 'scrim';
-  card.appendChild(scrim);
+  const saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.className = 'save-btn' + (savedIds.has(r.id) ? ' active' : '');
+  saveBtn.innerHTML = '&#9733;';
+  saveBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleSave(r.id, card); });
+  ph.appendChild(saveBtn);
 
-  const actions = document.createElement('div');
-  actions.className = 'actions';
-  actions.innerHTML = `
-    <div><button class="save ${savedIds.has(r.id) ? 'active' : ''}" data-act="save">&#9733;</button><span class="lbl">Guardar</span></div>
-    <div><button data-act="view">&#8594;</button><span class="lbl">Ver</span></div>
-    <div><button data-act="skip">&#10005;</button><span class="lbl">Saltar</span></div>
-  `;
-  card.appendChild(actions);
+  card.appendChild(ph);
 
-  const info = document.createElement('div');
-  info.className = 'info';
-  info.innerHTML = `
-    <h2>${escapeHtml(r.titulo)}</h2>
-    <div class="meta-row">
+  const body = document.createElement('div');
+  body.className = 'body';
+  body.innerHTML = `
+    <h3>${escapeHtml(r.titulo)}</h3>
+    <div class="meta-row" style="margin-top:8px;">
       <span>${r.minutos ?? '?'} min</span>
       <span>${dificultadLabel(r.dificultad)}</span>
       <span>${r.kcal ?? '?'} kcal</span>
     </div>
-    <div style="margin-top:10px;">${(r.tags || []).slice(0, 3).map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
   `;
-  card.appendChild(info);
+  card.appendChild(body);
 
-  actions.querySelector('[data-act="save"]').addEventListener('click', () => toggleSave(r.id, card));
-  actions.querySelector('[data-act="view"]').addEventListener('click', () => {
+  card.addEventListener('click', () => {
     window.location.href = `receta.html?id=${r.id}`;
   });
-  actions.querySelector('[data-act="skip"]').addEventListener('click', () => skipCard(card));
 
   return card;
 }
@@ -216,15 +222,8 @@ function onIntersect(entries) {
   }
 }
 
-function skipCard(card) {
-  const id = card.dataset.id;
-  logFeedEvent(id, 'saltada');
-  const next = card.nextElementSibling;
-  if (next) next.scrollIntoView({ behavior: 'smooth' });
-}
-
 async function toggleSave(id, card) {
-  const btn = card.querySelector('[data-act="save"]');
+  const btn = card.querySelector('.save-btn');
   if (savedIds.has(id)) {
     const { error } = await supabase.from('saves').delete().eq('user_id', user.id).eq('recipe_id', id);
     if (error) { toast('Error: ' + error.message); return; }

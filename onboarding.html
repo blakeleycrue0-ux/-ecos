@@ -8,6 +8,7 @@
 <style>
   .ob-top { padding: calc(18px + env(safe-area-inset-top)) 20px 10px; display: flex; align-items: center; gap: 14px; }
   .ob-top .progress-dots { flex: 1; }
+  .ob-top .progress-dots span { flex: 1; width: auto; }
   .ob-step { display: none; flex-direction: column; flex: 1; padding: 10px 20px 24px; }
   .ob-step.active { display: flex; animation: stepIn 0.4s cubic-bezier(.2,.8,.2,1) both; }
   #next-btn { transition: transform 0.15s cubic-bezier(.2,.8,.2,1); }
@@ -31,7 +32,7 @@
 
     <div class="ob-step active" data-step="1">
       <div class="ob-question"><h2>¿Que cocinas te gustan?</h2><p>Elige todas las que quieras.</p></div>
-      <div class="choice-grid" id="grid-cocinas"></div>
+      <div class="chip-grid" id="grid-cocinas"></div>
     </div>
 
     <div class="ob-step" data-step="2">
@@ -40,7 +41,7 @@
         <input type="text" id="fav-input" placeholder="Añadir ingrediente...">
         <button type="button" class="btn btn-ghost btn-sm" id="fav-add">Añadir</button>
       </div>
-      <div class="choice-grid" id="grid-favoritos"></div>
+      <div class="chip-grid" id="grid-favoritos"></div>
     </div>
 
     <div class="ob-step" data-step="3">
@@ -49,7 +50,7 @@
         <input type="text" id="hate-input" placeholder="Añadir ingrediente...">
         <button type="button" class="btn btn-ghost btn-sm" id="hate-add">Añadir</button>
       </div>
-      <div class="choice-grid" id="grid-odiados"></div>
+      <div class="chip-grid" id="grid-odiados"></div>
     </div>
 
     <div class="ob-step" data-step="4">
