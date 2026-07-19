@@ -9,36 +9,37 @@
   .admin-wrap { max-width: 720px; }
   .recipe-row {
     display: flex; align-items: center; gap: 12px;
-    padding: 12px 0; border-bottom: var(--edge); text-align: left;
-    width: 100%; background: none;
+    padding: 12px; margin-bottom: 10px; text-align: left;
+    width: 100%; background: var(--bg-raised); border: none;
+    border-radius: var(--radius); box-shadow: var(--shadow);
   }
   .recipe-row img {
-    width: 52px; height: 52px; object-fit: cover; background: var(--bg-raised);
-    border: var(--edge); flex-shrink: 0;
+    width: 52px; height: 52px; object-fit: cover; background: var(--bg-input);
+    border-radius: var(--radius-sm); flex-shrink: 0;
   }
   .recipe-row .info { flex: 1; min-width: 0; }
   .recipe-row .info strong { display: block; font-family: var(--font-display); font-size: 1rem; }
   .recipe-row .info span { font-size: 0.78rem; color: var(--fg-faint); }
-  .pill { font-size: 0.65rem; text-transform: uppercase; padding: 2px 7px; border: var(--edge); border-radius: var(--radius); }
-  .pill.pub { border-color: var(--ok); color: var(--ok); }
-  .pill.draft { border-color: var(--fg-faint); color: var(--fg-faint); }
+  .pill { font-size: 0.65rem; font-weight: 700; padding: 3px 9px; border-radius: var(--radius-pill); }
+  .pill.pub { background: var(--accent-tint); color: var(--accent); }
+  .pill.draft { background: var(--bg-input); color: var(--fg-faint); }
   .dyn-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; }
   .dyn-row .grip { display: flex; flex-direction: column; gap: 2px; }
-  .dyn-row .grip button { width: 28px; height: 22px; padding: 0; font-size: 0.7rem; border: var(--edge); background: var(--bg-input); }
+  .dyn-row .grip button { width: 28px; height: 22px; padding: 0; font-size: 0.7rem; border: none; border-radius: var(--radius-sm); background: var(--bg-input); }
   .dyn-row .fields { flex: 1; display: grid; gap: 6px; }
   .dyn-row .fields.ing { grid-template-columns: 1fr 70px 70px; }
   .dyn-row .fields textarea { min-height: 50px; }
-  .dyn-row .rm { width: 32px; height: 32px; padding: 0; border: var(--edge); color: var(--danger); flex-shrink: 0; }
-  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-top: var(--edge); border-bottom: var(--edge); margin: 16px 0; }
+  .dyn-row .rm { width: 32px; height: 32px; padding: 0; border: none; border-radius: var(--radius-sm); background: var(--danger-tint); color: var(--danger); flex-shrink: 0; }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: var(--bg-raised); border-radius: var(--radius); box-shadow: var(--shadow); margin: 16px 0; }
   .switch { position: relative; width: 46px; height: 26px; }
   .switch input { opacity: 0; width: 0; height: 0; }
-  .switch .track { position: absolute; inset: 0; background: var(--bg-input); border: var(--edge); cursor: pointer; }
-  .switch input:checked + .track { background: var(--accent); border-color: var(--accent); }
-  .switch .track::after { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 2px; background: var(--fg); transition: none; }
-  .switch input:checked + .track::after { left: 23px; background: var(--accent-fg); }
+  .switch .track { position: absolute; inset: 0; background: var(--bg-input); border-radius: var(--radius-pill); cursor: pointer; }
+  .switch input:checked + .track { background: var(--accent); }
+  .switch .track::after { content: ''; position: absolute; width: 20px; height: 20px; left: 3px; top: 3px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.25); transition: none; }
+  .switch input:checked + .track::after { left: 23px; }
   section.block { margin-bottom: 28px; }
-  .section-title { font-family: var(--font-body); font-weight: 600; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.07em; color: var(--fg-faint); margin-bottom: 10px; }
-  .thumb-preview { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: var(--bg-raised); border: var(--edge); margin-bottom: 10px; }
+  .section-title { font-family: var(--font-body); font-weight: 700; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--fg-faint); margin-bottom: 10px; }
+  .thumb-preview { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: var(--bg-input); border-radius: var(--radius); margin-bottom: 10px; }
 </style>
 </head>
 <body>
@@ -53,7 +54,7 @@
     <!-- LISTADO -->
     <div id="list-view">
       <div style="display:flex; gap:10px; margin-bottom:16px;">
-        <input type="text" id="search-input" placeholder="Buscar recetas..." style="flex:1; padding:12px; background:var(--bg-input); border:var(--edge); border-radius:var(--radius); color:var(--fg);">
+        <input type="text" id="search-input" placeholder="Buscar recetas..." style="flex:1; padding:12px 16px; background:var(--bg-input); border:1px solid transparent; border-radius:var(--radius-sm); color:var(--fg);">
         <button class="btn btn-primary btn-sm" id="new-btn">+ Nueva</button>
       </div>
       <div id="recipe-list"></div>
@@ -66,7 +67,7 @@
 
       <section class="block">
         <div class="section-title">Autocompletar con IA</div>
-        <textarea id="ai-raw-text" placeholder="Pega aqui el texto en bruto de una receta (ingredientes, pasos...) y deja que Claude la estructure." style="width:100%; min-height:110px; padding:12px; background:var(--bg-input); border:var(--edge); border-radius:var(--radius); color:var(--fg);"></textarea>
+        <textarea id="ai-raw-text" placeholder="Pega aqui el texto en bruto de una receta (ingredientes, pasos...) y deja que Claude la estructure." style="width:100%; min-height:110px; padding:14px 16px; background:var(--bg-input); border:1px solid transparent; border-radius:var(--radius-sm); color:var(--fg);"></textarea>
         <button class="btn btn-ghost" id="ai-parse-btn" style="margin-top:8px;">Autocompletar con IA</button>
         <p id="ai-status" style="font-size:0.8rem; margin-top:6px;"></p>
       </section>

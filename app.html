@@ -39,7 +39,7 @@
   }
   .card .info h2 { font-size: 2rem; margin-bottom: 10px; }
   .card .info .meta-row { color: #d8d4c8; }
-  .card .info .tag { border-color: rgba(244,241,232,0.4); color: #e8e5db; margin-right: 6px; }
+  .card .info .tag { background: rgba(255,255,255,0.16); color: #F7F2E5; margin-right: 6px; }
 
   .card .actions {
     position: absolute;
@@ -59,14 +59,14 @@
     display: flex; align-items: center; justify-content: center;
   }
   .card .actions button.save.active { color: var(--accent); border-color: var(--accent); }
-  .card .actions .lbl { display:block; font-size:0.6rem; text-align:center; margin-top:4px; text-transform:uppercase; color:#d8d4c8; }
+  .card .actions .lbl { display:block; font-size:0.62rem; font-weight:600; text-align:center; margin-top:4px; color:#d8d4c8; }
 
   .tabbar-overlay {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
     background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0));
     padding-top: 30px;
   }
-  .tabbar-overlay .tabbar { border-top: none; background: transparent; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .tabbar-overlay .tabbar { background: transparent; box-shadow: none; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
   .tabbar-overlay .tabbar a { color: rgba(244,241,232,0.65); }
   .tabbar-overlay .tabbar a.active { color: var(--accent); }
 </style>
@@ -85,9 +85,18 @@
 
 <div class="tabbar-overlay">
   <nav class="tabbar">
-    <a href="app.html" class="active">Feed</a>
-    <a href="nevera.html">Nevera</a>
-    <a href="guardadas.html">Guardadas</a>
+    <a href="app.html" class="active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M9 11v11"/><path d="M17 2c-1.5 0-3 1.5-3 4v3c0 1.5.5 2 2 2v10"/></svg>
+      <span>Feed</span>
+    </a>
+    <a href="nevera.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="5" y1="10" x2="19" y2="10"/><line x1="8" y1="5" x2="8" y2="7"/><line x1="8" y1="13" x2="8" y2="15"/></svg>
+      <span>Nevera</span>
+    </a>
+    <a href="guardadas.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+      <span>Guardadas</span>
+    </a>
   </nav>
 </div>
 

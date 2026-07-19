@@ -5,24 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nappe</title>
 <meta name="description" content="Recetas a tu punto. Feed personalizado y escaneo de nevera.">
-<meta name="theme-color" content="#EDEFEF">
+<meta name="theme-color" content="#F2F3F6">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="screen">
-  <div class="wrap grow center" style="padding-top: calc(60px + env(safe-area-inset-top)); padding-bottom: 40px;">
+  <div class="wrap grow center" style="padding-top: calc(64px + env(safe-area-inset-top)); padding-bottom: 40px;">
 
-    <div style="margin-bottom: 56px;">
-      <h1 style="font-size: 2.9rem; margin-bottom: 4px; text-transform: uppercase;">Nappe</h1>
-      <p style="color: var(--fg-faint); text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.1em; font-weight: 600;">
-        Recetas a tu punto
-      </p>
+    <div style="margin-bottom: 28px;">
+      <h1 style="font-size: 2.2rem; margin-bottom: 0;">Nappe</h1>
     </div>
 
-    <div id="auth-view" style="width: 100%;">
+    <div id="auth-view" style="width: 100%; background: var(--bg-raised); border-radius: 24px; box-shadow: var(--shadow); padding: 30px 24px;">
 
       <div id="signed-out">
-        <button type="button" class="btn btn-ghost" id="google-btn" style="background:var(--bg-raised); text-transform:none; display:flex; align-items:center; justify-content:center; gap:10px; font-weight:600; font-size:0.95rem; letter-spacing:0;">
+        <h2 style="font-size: 1.4rem; margin-bottom: 6px;">Entra en Nappe</h2>
+        <p style="font-size: 0.92rem; margin-bottom: 26px;">Tu feed de recetas, a tu gusto. Escanea tu nevera y descubre que cocinar hoy.</p>
+
+        <button type="button" class="btn" id="google-btn" style="background:#111318; color:#fff; box-shadow:none; display:flex; align-items:center; justify-content:center; gap:10px;">
           <svg width="19" height="19" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
             <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
             <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
@@ -32,11 +32,12 @@
           Continuar con Google
         </button>
 
-        <p id="auth-msg" style="margin-top: 20px; font-size: 0.85rem; min-height: 1.2em;"></p>
+        <p id="auth-msg" style="margin-top: 18px; font-size: 0.85rem; min-height: 1.2em; text-align: center;"></p>
       </div>
 
       <div id="signed-in" class="hidden">
-        <p>Sesion iniciada.</p>
+        <h2 style="font-size: 1.4rem; margin-bottom: 6px;">Sesion iniciada</h2>
+        <p style="font-size: 0.92rem; margin-bottom: 22px;">Ya puedes continuar.</p>
         <button type="button" class="btn btn-primary" id="continue-btn">Continuar</button>
         <button type="button" class="btn btn-ghost" id="logout-btn" style="margin-top: 12px;">Cerrar sesion</button>
       </div>

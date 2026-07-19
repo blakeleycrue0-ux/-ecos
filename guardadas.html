@@ -8,20 +8,21 @@
 <style>
   .subtabs { display: flex; gap: 8px; margin-bottom: 18px; }
   .subtabs button {
-    flex: 1; padding: 10px; border: var(--edge); background: var(--bg-raised);
-    color: var(--fg-dim); font-family: var(--font-body); font-weight: 600; text-transform: uppercase;
-    font-size: 0.72rem; letter-spacing: 0.06em;
+    flex: 1; padding: 11px; border: none; border-radius: var(--radius-pill); background: var(--bg-raised);
+    box-shadow: var(--shadow);
+    color: var(--fg-dim); font-family: var(--font-body); font-weight: 700;
+    font-size: 0.82rem;
   }
-  .subtabs button.active { border-color: var(--accent); color: var(--accent); }
+  .subtabs button.active { background: var(--accent); color: var(--accent-fg); box-shadow: none; }
 
-  .recipe-card-row { display: flex; gap: 12px; padding: 12px 0; border-bottom: var(--edge); cursor: pointer; }
-  .recipe-card-row img { width: 72px; height: 72px; object-fit: cover; background: var(--bg-raised); border: var(--edge); flex-shrink: 0; }
+  .recipe-card-row { display: flex; gap: 12px; padding: 12px; margin-bottom: 10px; background: var(--bg-raised); border-radius: var(--radius); box-shadow: var(--shadow); cursor: pointer; }
+  .recipe-card-row img { width: 72px; height: 72px; object-fit: cover; background: var(--bg-input); border-radius: var(--radius-sm); flex-shrink: 0; }
   .recipe-card-row .info { flex: 1; min-width: 0; }
   .recipe-card-row .info strong { display: block; font-family: var(--font-display); font-size: 1.05rem; }
   .recipe-card-row .info span { font-size: 0.78rem; color: var(--fg-faint); }
 
-  .profile-box { border: var(--edge); padding: 18px; margin-top: 28px; }
-  .profile-box .row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.9rem; border-bottom: var(--edge); }
+  .profile-box { background: var(--bg-raised); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; margin-top: 28px; }
+  .profile-box .row { display: flex; justify-content: space-between; padding: 10px 0; font-size: 0.9rem; border-bottom: 1px solid var(--line); }
   .profile-box .row:last-of-type { border-bottom: none; }
   .profile-box .lbl { color: var(--fg-faint); }
 </style>
@@ -58,9 +59,18 @@
   </div>
 
   <nav class="tabbar">
-    <a href="app.html">Feed</a>
-    <a href="nevera.html">Nevera</a>
-    <a href="guardadas.html" class="active">Guardadas</a>
+    <a href="app.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M9 11v11"/><path d="M17 2c-1.5 0-3 1.5-3 4v3c0 1.5.5 2 2 2v10"/></svg>
+      <span>Feed</span>
+    </a>
+    <a href="nevera.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="5" y1="10" x2="19" y2="10"/><line x1="8" y1="5" x2="8" y2="7"/><line x1="8" y1="13" x2="8" y2="15"/></svg>
+      <span>Nevera</span>
+    </a>
+    <a href="guardadas.html" class="active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+      <span>Guardadas</span>
+    </a>
   </nav>
 </div>
 

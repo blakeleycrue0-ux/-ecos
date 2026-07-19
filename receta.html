@@ -28,19 +28,20 @@
   .meta-item .num { font-family: var(--font-display); font-size: 1.3rem; display:block; }
   .meta-item .lbl { font-size: 0.68rem; text-transform: uppercase; color: var(--fg-faint); letter-spacing: 0.05em; }
 
-  .nutri-box { display: grid; grid-template-columns: repeat(4, 1fr); border: var(--edge); margin: 18px 0; }
-  .nutri-box div { padding: 12px 6px; text-align: center; border-right: var(--edge); }
+  .nutri-box { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--bg-raised); border-radius: var(--radius); box-shadow: var(--shadow); margin: 18px 0; }
+  .nutri-box div { padding: 14px 6px; text-align: center; border-right: 1px solid var(--line); }
   .nutri-box div:last-child { border-right: none; }
   .nutri-box .n { font-family: var(--font-display); font-size: 1.1rem; display: block; }
-  .nutri-box .l { font-size: 0.62rem; text-transform: uppercase; color: var(--fg-faint); }
+  .nutri-box .l { font-size: 0.62rem; text-transform: uppercase; color: var(--fg-faint); font-weight: 600; }
 
   .racion-stepper { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-  .racion-stepper button { width: 36px; height: 36px; border: var(--edge); background: var(--bg-input); color: var(--fg); font-size: 1.1rem; }
-  .racion-stepper .count { font-family: var(--font-display); font-size: 1.2rem; min-width: 2ch; text-align: center; }
+  .racion-stepper button { width: 36px; height: 36px; border: none; border-radius: 50%; background: var(--bg-input); color: var(--fg); font-size: 1.1rem; font-weight: 700; }
+  .racion-stepper .count { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; min-width: 6ch; text-align: center; }
 
-  .ing-list { list-style: none; margin: 0; padding: 0; }
-  .ing-list li { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: var(--edge); font-size: 0.95rem; }
-  .ing-list li .amt { color: var(--fg-dim); flex-shrink: 0; margin-left: 12px; }
+  .ing-list { list-style: none; margin: 0; padding: 0; background: var(--bg-raised); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+  .ing-list li { display: flex; justify-content: space-between; padding: 13px 16px; border-bottom: 1px solid var(--line); font-size: 0.95rem; font-weight: 500; }
+  .ing-list li:last-child { border-bottom: none; }
+  .ing-list li .amt { color: var(--fg-dim); flex-shrink: 0; margin-left: 12px; font-weight: 600; }
 
   /* modo cocina */
   #cook-mode {
