@@ -8,31 +8,36 @@
 <meta name="theme-color" content="#F7F2E7">
 <link rel="stylesheet" href="css/style.css">
 <style>
-  .brand-top { text-align: center; padding: calc(22px + env(safe-area-inset-top)) 0 4px; }
-  .brand-top .wordmark { font-size: 1.5rem; }
-  .brand-top .hat { width: 22px; height: 22px; margin-top: 2px; }
+  html, body { overflow: hidden; }
 
-  #ob-carousel { flex: 1; }
-  .ob-slide { padding: 4px 0 0; justify-content: flex-start; }
-  .ob-slide-text { padding: 6px 20px 18px; max-width: 480px; margin: 0 auto; }
-  .ob-slide h2 { font-size: 1.5rem; margin-bottom: 8px; }
-  .ob-slide-text p { max-width: 300px; margin: 0 auto; }
-  .ob-slide .art-panel { flex: 1; min-height: 220px; }
-
-  .info-chip-float { position: absolute; left: 16px; right: 16px; bottom: 16px; }
-
-  .sheet {
-    background: var(--bg-raised);
-    border-radius: 26px 26px 0 0;
-    box-shadow: 0 -6px 24px -10px rgba(40,30,10,0.18);
-    padding: 22px 20px calc(20px + env(safe-area-inset-bottom));
-    text-align: left;
+  #ob-carousel {
+    height: 100vh; height: 100dvh;
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
-  .sheet.hidden { display: none; }
-  .sheet h2 { font-size: 1.4rem; margin-bottom: 6px; }
-  .sheet p { font-size: 0.92rem; margin-bottom: 22px; }
+  #ob-carousel::-webkit-scrollbar { display: none; }
 
-  .nav-sheet { text-align: center; padding: 18px 20px calc(18px + env(safe-area-inset-bottom)); }
+  .ob-slide {
+    flex: 0 0 100%;
+    height: 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+
+  #google-hit {
+    position: absolute;
+    left: 11%; width: 78%;
+    top: 69%; height: 8.5%;
+    background: transparent;
+    border: none;
+  }
 </style>
 </head>
 <body>
@@ -47,177 +52,19 @@
   <div class="bar"><i></i></div>
 </div>
 
-<div class="screen">
-
-  <div class="brand-top">
-    <span class="logo-lockup">
-      <span class="wordmark">Nappe</span>
-      <svg class="hat" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9 24c-3 0-5-2.2-5-5s2-5 5-5c.4-3 3-5.3 6-5.3s5.6 2.3 6 5.3c2.6 0 4.8 1.9 5 4.4.1 2.8-2.1 5.1-5 5.1H9Z" stroke-width="2.2" stroke-linejoin="round"/>
-      </svg>
-    </span>
+<div id="ob-carousel">
+  <div class="ob-slide" style="background-image:url('img/onboarding/welcome.jpg');"></div>
+  <div class="ob-slide" style="background-image:url('img/onboarding/nevera.jpg');"></div>
+  <div class="ob-slide" style="background-image:url('img/onboarding/cocina.jpg');"></div>
+  <div class="ob-slide" style="background-image:url('img/onboarding/feed.jpg');"></div>
+  <div class="ob-slide" style="background-image:url('img/onboarding/login.jpg');">
+    <button type="button" id="google-hit" aria-label="Continuar con Google"></button>
   </div>
-
-  <div id="intro-flow" class="grow" style="display:flex; flex-direction:column;">
-    <div class="ob-carousel" id="ob-carousel">
-
-      <div class="ob-slide">
-        <div class="ob-slide-text">
-          <h2>Bienvenido a Nappe</h2>
-          <p>Tu cocina, mas facil. Recetas a tu gusto y una ayudita cuando no sabes que hacer de comer.</p>
-        </div>
-        <div class="art-panel" style="background-image:url('img/onboarding/welcome.jpg');"></div>
-      </div>
-
-      <div class="ob-slide">
-        <div class="ob-slide-text">
-          <div class="feature-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="5" y1="10" x2="19" y2="10"/><line x1="8" y1="5" x2="8" y2="7"/><line x1="8" y1="13" x2="8" y2="15"/></svg>
-          </div>
-          <h2>Escanea tu nevera</h2>
-          <p>Haz una foto de lo que tienes y te decimos que puedes cocinar hoy mismo.</p>
-        </div>
-        <div class="art-panel" style="background-image:url('img/onboarding/nevera.jpg');"></div>
-      </div>
-
-      <div class="ob-slide">
-        <div class="ob-slide-text">
-          <div class="feature-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M6 4l2 3M18 4l-2 3"/><path d="M4 12a8 8 0 0 1 16 0Z"/><path d="M4 12h16v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/></svg>
-          </div>
-          <h2>Modo cocina paso a paso</h2>
-          <p>Temporizadores y pasos claros, uno a uno, sin liarte con el movil lleno de aceite.</p>
-        </div>
-        <div class="art-panel" style="background-image:url('img/onboarding/cocina.jpg');"></div>
-      </div>
-
-      <div class="ob-slide">
-        <div class="ob-slide-text">
-          <div class="feature-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M9 11v11"/><path d="M17 2c-1.5 0-3 1.5-3 4v3c0 1.5.5 2 2 2v10"/></svg>
-          </div>
-          <h2>Un feed hecho para ti</h2>
-          <p>Cuentanos que te gusta y te iremos proponiendo recetas a tu medida.</p>
-        </div>
-        <div class="art-panel" style="background-image:url('img/onboarding/feed.jpg');">
-          <div class="info-chip info-chip-float">
-            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3Z"/></svg></div>
-            <div><strong>Recetas personalizadas</strong><span>para tu dia a dia.</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="ob-slide" id="login-slide">
-        <div class="ob-slide-text">
-          <h2>Entra en Nappe</h2>
-          <p>Tu feed de recetas, a tu gusto. Escanea tu nevera y descubre que cocinar hoy.</p>
-        </div>
-        <div class="art-panel" style="background-image:url('img/onboarding/login.jpg');"></div>
-      </div>
-
-    </div>
-
-    <div class="nav-sheet sheet wrap" id="bottom-nav">
-      <div class="carousel-dots" id="carousel-dots"></div>
-      <button type="button" class="btn btn-primary btn-arrow" id="carousel-next">
-        Siguiente
-        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </button>
-    </div>
-
-    <div id="auth-view" class="sheet hidden wrap">
-
-      <div id="signed-out">
-        <button type="button" class="btn" id="google-btn" style="display:flex; align-items:center; justify-content:center; gap:10px;">
-          <svg width="19" height="19" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
-            <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
-            <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
-            <path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/>
-            <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
-          </svg>
-          Continuar con Google
-        </button>
-
-        <p id="auth-msg" style="margin-top: 18px; font-size: 0.85rem; min-height: 1.2em; text-align: center;"></p>
-      </div>
-
-      <div id="signed-in" class="hidden">
-        <h2>Sesion iniciada</h2>
-        <p>Ya puedes continuar.</p>
-        <button type="button" class="btn btn-primary" id="continue-btn">Continuar</button>
-        <button type="button" class="btn btn-ghost" id="logout-btn" style="margin-top: 12px;">Cerrar sesion</button>
-      </div>
-
-    </div>
-  </div>
-
 </div>
 
 <script type="module">
 import { supabase, getSession, getProfile } from './js/supabase-client.js';
 import { toast } from './js/utils.js';
-
-const signedOut = document.getElementById('signed-out');
-const signedIn = document.getElementById('signed-in');
-const authMsg = document.getElementById('auth-msg');
-const carousel = document.getElementById('ob-carousel');
-const slides = [...carousel.querySelectorAll('.ob-slide')];
-const dotsWrap = document.getElementById('carousel-dots');
-const nextBtn = document.getElementById('carousel-next');
-const bottomNav = document.getElementById('bottom-nav');
-const authView = document.getElementById('auth-view');
-
-let activeSlide = 0;
-
-function buildDots() {
-  dotsWrap.innerHTML = '';
-  slides.forEach((_, i) => {
-    const d = document.createElement('span');
-    if (i === activeSlide) d.classList.add('active');
-    dotsWrap.appendChild(d);
-  });
-}
-
-function goToSlide(i) {
-  slides[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-}
-
-function updateActiveFromScroll() {
-  const width = carousel.clientWidth;
-  const idx = Math.round(carousel.scrollLeft / width);
-  if (idx === activeSlide) return;
-  activeSlide = Math.max(0, Math.min(slides.length - 1, idx));
-  buildDots();
-  bottomNav.classList.toggle('hidden', activeSlide === slides.length - 1);
-  authView.classList.toggle('hidden', activeSlide !== slides.length - 1);
-}
-
-carousel.addEventListener('scroll', () => {
-  window.requestAnimationFrame(updateActiveFromScroll);
-}, { passive: true });
-
-nextBtn.addEventListener('click', () => {
-  if (activeSlide < slides.length - 1) goToSlide(activeSlide + 1);
-});
-
-buildDots();
-
-function showOnlyLogin() {
-  carousel.style.overflowX = 'hidden';
-  activeSlide = slides.length - 1;
-  goToSlide(activeSlide);
-  bottomNav.classList.add('hidden');
-  authView.classList.remove('hidden');
-}
-
-async function routeIfSignedIn() {
-  const session = await getSession();
-  if (!session) return;
-  signedOut.classList.add('hidden');
-  signedIn.classList.remove('hidden');
-  showOnlyLogin();
-  return session;
-}
 
 async function goToApp(user) {
   try {
@@ -232,42 +79,33 @@ async function goToApp(user) {
   }
 }
 
-document.getElementById('google-btn').addEventListener('click', async () => {
+document.getElementById('google-hit').addEventListener('click', async () => {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: { redirectTo: window.location.origin + window.location.pathname },
   });
-  if (error) {
-    authMsg.textContent = 'No se pudo iniciar sesion. Intentalo de nuevo.';
-    toast(error.message);
-  }
-});
-
-document.getElementById('logout-btn').addEventListener('click', async () => {
-  await supabase.auth.signOut();
-  signedIn.classList.add('hidden');
-  signedOut.classList.remove('hidden');
-});
-
-document.getElementById('continue-btn').addEventListener('click', async () => {
-  const session = await getSession();
-  if (session) goToApp(session.user);
+  if (error) toast(error.message);
 });
 
 supabase.auth.onAuthStateChange((_event, session) => {
-  if (session) {
-    signedOut.classList.add('hidden');
-    signedIn.classList.remove('hidden');
-    showOnlyLogin();
-  }
+  if (session) goToApp(session.user);
 });
 
 const minSplash = new Promise((r) => setTimeout(r, 900));
-Promise.all([routeIfSignedIn(), minSplash]).then(() => {
+
+async function init() {
+  const session = await getSession();
+  if (session) {
+    goToApp(session.user);
+    return;
+  }
+  await minSplash;
   const splash = document.getElementById('splash');
   splash.classList.add('out');
   setTimeout(() => splash.remove(), 450);
-});
+}
+
+init();
 </script>
 </body>
 </html>
