@@ -1,30 +1,30 @@
 /* ===========================================================
    Nappe — hoja de estilos unica
-   Editorial de cocina: crema calido, tipografia serif elegante,
-   fotografia a sangre. Sin degradados decorativos, sin sombras
-   suaves, sin emojis. Movil primero.
+   Acero: gris frio de electrodomestico de cocina, tipografia de
+   rotulo industrial, azul de placa de induccion como unico acento.
+   Plana, precisa, sin degradados decorativos, sin sombras suaves,
+   sin emojis. Sin fuentes externas — todo con la tipografia del
+   sistema, como el panel de un aparato de verdad. Movil primero.
    =========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap');
-
 :root {
-  --bg: #F3EDDF;
+  --bg: #EDEFEF;
   --bg-raised: #FFFFFF;
   --bg-input: #FFFFFF;
-  --line: #E1D6BE;
-  --fg: #251D14;
-  --fg-dim: #6C5D46;
-  --fg-faint: #A0906E;
-  --accent: #B8481F;
-  --accent-tint: #F6E3D3;
-  --accent-fg: #FBF5E8;
-  --danger: #7C2A22;
-  --ok: #4B6B3D;
+  --line: #C7CDCE;
+  --fg: #14181A;
+  --fg-dim: #4B5457;
+  --fg-faint: #6C7679;
+  --accent: #0F6FA8;
+  --accent-tint: #DCEBF3;
+  --accent-fg: #F3F8FA;
+  --danger: #B23823;
+  --ok: #3D7A4F;
 
-  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: Arial, 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: Arial, 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  --radius: 3px;
+  --radius: 2px;
   --edge: 1px solid var(--line);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -50,15 +50,15 @@ a { color: inherit; text-decoration: none; }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   margin: 0 0 0.4em;
 }
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 1.7rem; }
-h3 { font-size: 1.2rem; }
+h1 { font-size: 2.3rem; }
+h2 { font-size: 1.6rem; }
+h3 { font-size: 1.15rem; }
 
 p { margin: 0 0 1em; color: var(--fg-dim); }
 
@@ -102,15 +102,15 @@ button { cursor: pointer; }
   justify-content: center;
   gap: 8px;
   width: 100%;
-  padding: 16px 20px;
+  padding: 15px 20px;
   border: var(--edge);
   border-radius: var(--radius);
-  background: transparent;
+  background: var(--bg-raised);
   color: var(--fg);
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.07em;
   font-size: 0.78rem;
   transition: none;
 }
@@ -155,10 +155,10 @@ button { cursor: pointer; }
 
 .field label {
   display: block;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-weight: 700;
   color: var(--fg-faint);
   margin-bottom: 6px;
 }
@@ -205,9 +205,9 @@ button { cursor: pointer; }
   background: var(--bg-raised);
   text-align: left;
   font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0;
+  font-weight: 700;
+  font-size: 0.94rem;
+  letter-spacing: -0.005em;
   color: var(--fg-dim);
   width: 100%;
 }
@@ -233,10 +233,10 @@ button { cursor: pointer; }
 
 .brand {
   font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 600;
-  font-size: 1.35rem;
-  letter-spacing: 0;
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
 }
 
 .tabbar {
@@ -257,7 +257,7 @@ button { cursor: pointer; }
   letter-spacing: 0.06em;
   color: var(--fg-faint);
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 700;
   border-top: 2px solid transparent;
 }
 
@@ -273,9 +273,10 @@ button { cursor: pointer; }
   border: var(--edge);
   border-radius: var(--radius);
   padding: 3px 8px;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  font-weight: 600;
   color: var(--fg-dim);
 }
 
@@ -285,6 +286,7 @@ button { cursor: pointer; }
   flex-wrap: wrap;
   color: var(--fg-dim);
   font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .spinner {
