@@ -150,6 +150,12 @@ drop policy if exists "profiles_update_own" on profiles;
 create policy "profiles_update_own" on profiles
   for update using (id = auth.uid()) with check (id = auth.uid());
 
+-- permite crear (upsert) la propia fila si por lo que sea no la creo el
+-- trigger (p.ej. usuarios que existian antes de que la tabla existiera).
+drop policy if exists "profiles_insert_own" on profiles;
+create policy "profiles_insert_own" on profiles
+  for insert with check (id = auth.uid());
+
 -- taste_profile: solo su propio dueño
 drop policy if exists "taste_profile_select_own" on taste_profile;
 create policy "taste_profile_select_own" on taste_profile

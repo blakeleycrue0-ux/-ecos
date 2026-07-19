@@ -207,7 +207,7 @@ async function finish() {
     return;
   }
 
-  const { error: profErr } = await supabase.from('profiles').update({ onboarding_done: true }).eq('id', user.id);
+  const { error: profErr } = await supabase.from('profiles').upsert({ id: user.id, onboarding_done: true });
   if (profErr) {
     toast('Error: ' + profErr.message);
     btn.disabled = false;
