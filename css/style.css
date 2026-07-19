@@ -506,7 +506,7 @@ button { cursor: pointer; }
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 26px;
+  margin: 0 auto 18px;
   animation: float 3.6s ease-in-out infinite;
 }
 .feature-badge svg { width: 40px; height: 40px; stroke: var(--accent); }
@@ -552,12 +552,12 @@ button { cursor: pointer; }
   border-radius: 28px 28px 0 0;
   overflow: hidden;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  background:
-    radial-gradient(120% 90% at 15% 10%, rgba(30,68,48,0.14) 0%, transparent 55%),
-    radial-gradient(100% 80% at 90% 100%, rgba(30,68,48,0.18) 0%, transparent 60%),
-    var(--accent-tint);
+  background-color: var(--accent-tint);
+  background-image: linear-gradient(160deg, var(--bg-input), var(--accent-tint));
+  background-size: cover;
+  background-position: center;
 }
 .art-panel svg.art-icon {
   width: 34%;
