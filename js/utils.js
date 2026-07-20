@@ -24,6 +24,23 @@ export function dificultadLabel(d) {
   return { facil: 'Facil', media: 'Media', dificil: 'Dificil' }[d] || d || '';
 }
 
+// Degradado suave y deterministico para recetas sin foto: la misma
+// receta siempre recibe el mismo color.
+export function placeholderGradient(seed) {
+  const PAIRS = [
+    ['#D7E4CE', '#B9CFAD'],
+    ['#EADFC8', '#D8C7A3'],
+    ['#E8D9C2', '#CDB894'],
+    ['#EFE2C4', '#DCC99B'],
+    ['#E5DEC5', '#C9BE97'],
+    ['#E2E7D3', '#C2CDAB'],
+  ];
+  let h = 0;
+  for (const ch of String(seed)) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  const [a, b] = PAIRS[h % PAIRS.length];
+  return `linear-gradient(140deg, ${a}, ${b})`;
+}
+
 // Intenta parsear una respuesta de Claude que deberia ser JSON puro,
 // pero puede venir envuelta en texto o en un bloque de codigo.
 export function parseAiJson(text) {

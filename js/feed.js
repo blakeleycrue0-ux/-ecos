@@ -1,5 +1,5 @@
 import { supabase, requireAuth, getProfile } from './supabase-client.js';
-import { toast, escapeHtml, dificultadLabel } from './utils.js';
+import { toast, escapeHtml, dificultadLabel, placeholderGradient } from './utils.js';
 
 const $ = (sel) => document.querySelector(sel);
 const feedEl = $('#feed');
@@ -176,6 +176,8 @@ function buildCard(r, i) {
     img.loading = 'lazy';
     img.alt = r.titulo;
     ph.appendChild(img);
+  } else {
+    ph.style.background = placeholderGradient(r.id);
   }
   const tag = document.createElement('span');
   tag.className = 'tag';

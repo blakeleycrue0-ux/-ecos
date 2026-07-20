@@ -27,8 +27,78 @@ async function init() {
   $('#f-imagen-file').addEventListener('change', handleImageUpload);
   $('#ai-parse-btn').addEventListener('click', runAiParse);
   $('#search-input').addEventListener('input', renderList);
+  $('#seed-btn').addEventListener('click', seedRecipes);
 
   await loadRecipes();
+}
+
+// Inserta las 100 recetas de ejemplo, saltando las que ya existan por titulo.
+async function seedRecipes() {
+  const btn = $('#seed-btn');
+  const status = $('#seed-status');
+  if (!confirm('Se van a cargar las recetas de ejemplo que falten. ¿Continuar?')) return;
+
+  btn.disabled = true;
+  status.textContent = 'Preparando recetas...';
+
+  try {
+    const { SEED_RECIPES } = await import('./seed-data.js');
+    const existing = new Set(recipes.map((r) => (r.titulo || '').toLowerCase()));
+    const pending = SEED_RECIPES.filter((r) => !existing.has(r.titulo.toLowerCase()));
+
+    if (pending.length === 0) {
+      status.textContent = 'Ya estan todas cargadas.';
+      btn.disabled = false;
+      return;
+    }
+
+    let done = 0;
+    const BATCH = 20;
+    for (let i = 0; i < pending.length; i += BATCH) {
+      const batch = pending.slice(i, i + BATCH).map((r) => ({ ...r, id: crypto.randomUUID() }));
+
+      const { error: rErr } = await supabase.from('recipes').insert(batch.map((r) => ({
+        id: r.id,
+        titulo: r.titulo,
+        descripcion: r.descripcion,
+        minutos: r.minutos,
+        dificultad: r.dificultad,
+        raciones: r.raciones,
+        cocina: r.cocina,
+        tags: r.tags,
+        kcal: r.kcal,
+        proteina: r.proteina,
+        carbos: r.carbos,
+        grasa: r.grasa,
+        publicada: true,
+      })));
+      if (rErr) throw rErr;
+
+      const ings = batch.flatMap((r) => r.ingredientes.map((ing, idx) => ({
+        recipe_id: r.id, nombre: ing.nombre, cantidad: ing.cantidad, unidad: ing.unidad, orden: idx,
+      })));
+      const { error: iErr } = await supabase.from('recipe_ingredients').insert(ings);
+      if (iErr) throw iErr;
+
+      const steps = batch.flatMap((r) => r.pasos.map((p, idx) => ({
+        recipe_id: r.id, orden: idx, texto: p.texto, minutos_timer: p.minutos_timer,
+      })));
+      const { error: sErr } = await supabase.from('recipe_steps').insert(steps);
+      if (sErr) throw sErr;
+
+      done += batch.length;
+      status.textContent = `Cargadas ${done} de ${pending.length}...`;
+    }
+
+    status.textContent = `Listo: ${done} recetas cargadas y publicadas.`;
+    toast('Recetas de ejemplo cargadas');
+    await loadRecipes();
+  } catch (err) {
+    status.textContent = 'Error: ' + (err.message || err);
+    toast('No se pudieron cargar: ' + (err.message || err));
+  } finally {
+    btn.disabled = false;
+  }
 }
 
 async function loadRecipes() {

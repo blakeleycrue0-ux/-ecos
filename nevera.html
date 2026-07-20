@@ -60,11 +60,11 @@
     <!-- PASO 1: captura -->
     <div id="capture-step">
       <p>Haz una foto de tu nevera o despensa y te diremos que puedes cocinar.</p>
-      <label class="capture-box" id="capture-box">
-        <span class="hint" id="capture-hint">Toca para hacer una foto</span>
+      <div class="capture-box" id="capture-box" role="button" tabindex="0">
+        <span class="hint" id="capture-hint">Toca para hacer una foto o elegir de la galeria</span>
         <img id="capture-preview" class="hidden">
-        <input type="file" accept="image/*" capture="environment" id="file-input" style="display:none;">
-      </label>
+      </div>
+      <input type="file" accept="image/*" id="file-input" style="display:none;">
       <button class="btn btn-primary" id="analyze-btn" style="margin-top:16px;" disabled>Analizar foto</button>
       <p id="analyze-status" style="font-size:0.82rem; margin-top:10px;"></p>
     </div>

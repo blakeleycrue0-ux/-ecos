@@ -1,5 +1,5 @@
 import { supabase, requireAuth } from './supabase-client.js';
-import { toast, escapeHtml, dificultadLabel } from './utils.js';
+import { toast, escapeHtml, dificultadLabel, placeholderGradient } from './utils.js';
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -86,6 +86,8 @@ function render() {
     img.src = recipe.imagen_url;
     img.alt = recipe.titulo;
     media.appendChild(img);
+  } else {
+    $('#hero').style.background = placeholderGradient(recipe.id);
   }
 
   updateSaveBtn();
