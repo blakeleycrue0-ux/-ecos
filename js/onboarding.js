@@ -3,29 +3,33 @@ import { toast, escapeHtml } from './utils.js';
 
 const $ = (sel) => document.querySelector(sel);
 
-const COCINAS = ['Italiana', 'Española', 'Mexicana', 'Asiatica', 'India', 'Mediterranea', 'Francesa', 'Americana', 'Japonesa', 'Peruana', 'Marroqui', 'Nordica'];
-const FAVORITOS = ['Pollo', 'Ternera', 'Cerdo', 'Pescado', 'Marisco', 'Huevos', 'Queso', 'Setas', 'Tomate', 'Aguacate', 'Legumbres', 'Pasta', 'Arroz', 'Chocolate'];
-const ODIADOS = ['Cilantro', 'Picante', 'Marisco', 'Higado', 'Aceitunas', 'Cebolla', 'Ajo', 'Gluten', 'Lactosa', 'Frutos secos', 'Huevo', 'Setas'];
-
-const NIVELES = [
-  { v: 'principiante', t: 'Principiante', d: 'Sigo la receta al pie de la letra.' },
-  { v: 'medio', t: 'Medio', d: 'Me manejo bien, improviso un poco.' },
-  { v: 'avanzado', t: 'Avanzado', d: 'Domino tecnicas y me atrevo con todo.' },
+const OBJETIVOS = [
+  { v: 'perder', t: 'Perder grasa', d: 'Deficit suave, sin pasar hambre.' },
+  { v: 'mantener', t: 'Mantenerme', d: 'Comer bien y quedarme como estoy.' },
+  { v: 'ganar', t: 'Ganar musculo', d: 'Superavit ligero para construir.' },
 ];
 
-const TIEMPOS = [
-  { v: 15, t: 'Menos de 15 min', d: 'Necesito algo rapido.' },
-  { v: 30, t: '15 a 40 min', d: 'Tengo un rato para cocinar.' },
-  { v: 60, t: 'Mas de 40 min', d: 'Me gusta tomarme mi tiempo.' },
+const SEXOS = [
+  { v: 'hombre', t: 'Hombre', d: '' },
+  { v: 'mujer', t: 'Mujer', d: '' },
 ];
+
+const ACTIVIDADES = [
+  { v: 'sedentario', t: 'Sedentario', d: 'Trabajo de oficina, poco ejercicio.' },
+  { v: 'ligero', t: 'Ligero', d: 'Camino bastante o entreno 1-2 dias.' },
+  { v: 'moderado', t: 'Moderado', d: 'Entreno 3-5 dias por semana.' },
+  { v: 'alto', t: 'Muy activo', d: 'Trabajo fisico o entreno casi a diario.' },
+];
+
+const MULT = { sedentario: 1.2, ligero: 1.375, moderado: 1.55, alto: 1.725 };
+const AJUSTE = { perder: -400, mantener: 0, ganar: 300 };
 
 const state = {
   step: 1,
-  cocinas: new Set(),
-  favoritos: new Set(),
-  odiados: new Set(),
-  nivel: null,
-  tiempo: null,
+  objetivo: null,
+  sexo: null,
+  actividad: null,
+  plan: null, // { kcal, prot, carb, grasa }
 };
 
 let user = null;
@@ -35,89 +39,36 @@ async function init() {
   user = await requireAuth();
   if (!user) return;
 
-  renderChoiceGrid('grid-cocinas', COCINAS, state.cocinas);
-  renderChoiceGrid('grid-favoritos', FAVORITOS, state.favoritos);
-  renderChoiceGrid('grid-odiados', ODIADOS, state.odiados);
-  renderSingleGrid('grid-nivel', NIVELES, (v) => state.nivel = v);
-  renderSingleGrid('grid-tiempo', TIEMPOS, (v) => state.tiempo = v);
+  renderSingleGrid('grid-objetivo', OBJETIVOS, (v) => state.objetivo = v);
+  renderSingleGrid('grid-sexo', SEXOS, (v) => state.sexo = v);
+  renderSingleGrid('grid-actividad', ACTIVIDADES, (v) => state.actividad = v);
   renderDots();
 
-  $('#fav-add').addEventListener('click', () => addFree('fav-input', 'grid-favoritos', state.favoritos));
-  $('#hate-add').addEventListener('click', () => addFree('hate-input', 'grid-odiados', state.odiados));
   $('#back-step').addEventListener('click', prevStep);
   $('#ob-form').addEventListener('submit', onSubmit);
 
-  const { data: existing } = await supabase.from('taste_profile').select('*').eq('user_id', user.id).maybeSingle();
-  if (existing) prefillFromExisting(existing);
+  const { data: existing } = await supabase.from('diet_profile').select('*').eq('user_id', user.id).maybeSingle();
+  if (existing) prefill(existing);
 }
 
-function prefillFromExisting(existing) {
-  prefillMulti('grid-cocinas', existing.cocinas, state.cocinas);
-  prefillMulti('grid-favoritos', existing.ingredientes_favoritos, state.favoritos);
-  prefillMulti('grid-odiados', existing.ingredientes_odiados, state.odiados);
-  prefillSingle('grid-nivel', NIVELES, existing.nivel, (v) => state.nivel = v);
-  prefillSingle('grid-tiempo', TIEMPOS, existing.tiempo_habitual, (v) => state.tiempo = v);
-}
-
-function prefillMulti(gridId, values, set) {
-  if (!Array.isArray(values) || values.length === 0) return;
-  const grid = $('#' + gridId);
-  for (const val of values) {
-    const existingBtn = [...grid.querySelectorAll('.chip-opt')].find((b) => b.textContent.toLowerCase() === val.toLowerCase());
-    if (existingBtn) {
-      set.add(existingBtn.textContent);
-      existingBtn.classList.add('selected');
-    } else {
-      addChoiceCard(grid, val, set);
-      set.add(val);
-      grid.lastElementChild.classList.add('selected');
-    }
-  }
+function prefill(p) {
+  prefillSingle('grid-objetivo', OBJETIVOS, p.objetivo, (v) => state.objetivo = v);
+  prefillSingle('grid-sexo', SEXOS, p.sexo, (v) => state.sexo = v);
+  prefillSingle('grid-actividad', ACTIVIDADES, p.actividad, (v) => state.actividad = v);
+  if (p.edad) $('#f-edad').value = p.edad;
+  if (p.altura_cm) $('#f-altura').value = p.altura_cm;
+  if (p.peso_kg) $('#f-peso').value = p.peso_kg;
 }
 
 function prefillSingle(gridId, options, value, onSelect) {
   if (value == null) return;
   const idx = options.findIndex((o) => o.v === value);
   if (idx === -1) return;
-  const grid = $('#' + gridId);
-  const btn = grid.children[idx];
+  const btn = $('#' + gridId).children[idx];
   if (btn) {
     btn.classList.add('selected');
     onSelect(value);
   }
-}
-
-function renderChoiceGrid(gridId, options, set) {
-  const grid = $('#' + gridId);
-  for (const opt of options) addChoiceCard(grid, opt, set);
-}
-
-function addChoiceCard(grid, label, set) {
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'chip-opt';
-  btn.textContent = label;
-  btn.addEventListener('click', () => {
-    if (set.has(label)) { set.delete(label); btn.classList.remove('selected'); }
-    else { set.add(label); btn.classList.add('selected'); }
-  });
-  grid.appendChild(btn);
-}
-
-function addFree(inputId, gridId, set) {
-  const input = $('#' + inputId);
-  const val = input.value.trim();
-  if (!val) return;
-  const grid = $('#' + gridId);
-  const existing = [...grid.querySelectorAll('.choice-card')].find((b) => b.textContent.toLowerCase() === val.toLowerCase());
-  if (existing) {
-    if (!set.has(existing.textContent)) { set.add(existing.textContent); existing.classList.add('selected'); }
-  } else {
-    addChoiceCard(grid, val, set);
-    set.add(val);
-    grid.lastElementChild.classList.add('selected');
-  }
-  input.value = '';
 }
 
 function renderSingleGrid(gridId, options, onSelect) {
@@ -126,7 +77,7 @@ function renderSingleGrid(gridId, options, onSelect) {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'choice-card level-card wide';
-    btn.innerHTML = `<span class="t">${escapeHtml(opt.t)}</span><span class="d">${escapeHtml(opt.d)}</span>`;
+    btn.innerHTML = `<span class="t">${escapeHtml(opt.t)}</span>${opt.d ? `<span class="d">${escapeHtml(opt.d)}</span>` : ''}`;
     btn.addEventListener('click', () => {
       [...grid.children].forEach((c) => c.classList.remove('selected'));
       btn.classList.add('selected');
@@ -162,12 +113,34 @@ function prevStep() {
   showStep(state.step);
 }
 
+function getDatos() {
+  return {
+    edad: Number($('#f-edad').value),
+    altura: Number($('#f-altura').value),
+    peso: Number($('#f-peso').value),
+  };
+}
+
 function validateStep() {
-  if (state.step === 1 && state.cocinas.size === 0) { toast('Elige al menos una cocina'); return false; }
-  if (state.step === 2 && state.favoritos.size === 0) { toast('Elige al menos un ingrediente'); return false; }
-  if (state.step === 4 && !state.nivel) { toast('Elige tu nivel'); return false; }
-  if (state.step === 5 && !state.tiempo) { toast('Elige cuanto tiempo sueles tener'); return false; }
+  if (state.step === 1 && !state.objetivo) { toast('Elige tu objetivo'); return false; }
+  if (state.step === 2 && !state.sexo) { toast('Elige una opcion'); return false; }
+  if (state.step === 3) {
+    const { edad, altura, peso } = getDatos();
+    if (!edad || !altura || !peso) { toast('Rellena edad, altura y peso'); return false; }
+  }
+  if (state.step === 4 && !state.actividad) { toast('Elige tu nivel de actividad'); return false; }
   return true;
+}
+
+// Mifflin-St Jeor + multiplicador de actividad + ajuste segun objetivo.
+function calcularPlan() {
+  const { edad, altura, peso } = getDatos();
+  const tmb = 10 * peso + 6.25 * altura - 5 * edad + (state.sexo === 'hombre' ? 5 : -161);
+  const kcal = Math.max(1200, Math.round((tmb * MULT[state.actividad] + AJUSTE[state.objetivo]) / 10) * 10);
+  const prot = Math.round((kcal * 0.30) / 4);
+  const carb = Math.round((kcal * 0.40) / 4);
+  const grasa = Math.round((kcal * 0.30) / 9);
+  return { kcal, prot, carb, grasa };
 }
 
 async function onSubmit(e) {
@@ -176,6 +149,13 @@ async function onSubmit(e) {
 
   if (state.step < TOTAL_STEPS) {
     state.step += 1;
+    if (state.step === TOTAL_STEPS) {
+      state.plan = calcularPlan();
+      $('#r-kcal').textContent = state.plan.kcal;
+      $('#r-prot').textContent = state.plan.prot + 'g';
+      $('#r-carb').textContent = state.plan.carb + 'g';
+      $('#r-grasa').textContent = state.plan.grasa + 'g';
+    }
     showStep(state.step);
     return;
   }
@@ -188,20 +168,25 @@ async function finish() {
   btn.disabled = true;
   btn.textContent = 'Guardando...';
 
+  const { edad, altura, peso } = getDatos();
   const payload = {
     user_id: user.id,
-    cocinas: [...state.cocinas],
-    ingredientes_favoritos: [...state.favoritos],
-    ingredientes_odiados: [...state.odiados],
-    restricciones: [],
-    nivel: state.nivel,
-    tiempo_habitual: state.tiempo,
+    objetivo: state.objetivo,
+    sexo: state.sexo,
+    edad,
+    altura_cm: altura,
+    peso_kg: peso,
+    actividad: state.actividad,
+    kcal_objetivo: state.plan.kcal,
+    proteina_objetivo: state.plan.prot,
+    carbos_objetivo: state.plan.carb,
+    grasa_objetivo: state.plan.grasa,
     updated_at: new Date().toISOString(),
   };
 
-  const { error: tpErr } = await supabase.from('taste_profile').upsert(payload);
-  if (tpErr) {
-    toast('Error al guardar tus gustos: ' + tpErr.message);
+  const { error: dpErr } = await supabase.from('diet_profile').upsert(payload);
+  if (dpErr) {
+    toast('Error al guardar tu plan: ' + dpErr.message);
     btn.disabled = false;
     btn.textContent = 'Empezar';
     return;

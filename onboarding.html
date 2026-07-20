@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Nappe — Cuentanos tus gustos</title>
+<title>Nappe — Tu objetivo</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
   .ob-top { padding: calc(18px + env(safe-area-inset-top)) 20px 10px; display: flex; align-items: center; gap: 14px; }
@@ -13,12 +13,21 @@
   .ob-step.active { display: flex; animation: stepIn 0.4s cubic-bezier(.2,.8,.2,1) both; }
   #next-btn { transition: transform 0.15s cubic-bezier(.2,.8,.2,1); }
   .ob-question { margin: 10px 0 22px; }
-  .free-add { display: flex; gap: 8px; margin: 16px 0 10px; }
-  .free-add input { flex: 1; padding: 14px 16px; background: var(--bg-input); border: 1px solid transparent; border-radius: var(--radius-sm); color: var(--fg); }
   .level-card { text-align: left; padding: 20px; margin-bottom: 12px; }
-  .level-card .t { display:block; font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; margin-bottom: 4px; }
-  .level-card .d { display:block; font-size: 0.82rem; color: var(--fg-dim); font-family: var(--font-body); text-transform: none; letter-spacing: 0; }
+  .level-card .t { display:block; font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; margin-bottom: 4px; }
+  .level-card .d { display:block; font-size: 0.82rem; color: var(--fg-dim); font-family: var(--font-body); font-weight: 500; }
   .ob-nav { display: flex; gap: 10px; padding: 0 20px calc(20px + env(safe-area-inset-bottom)); }
+
+  .result-card {
+    background: var(--bg-raised); border: var(--edge); border-radius: var(--radius);
+    padding: 26px 22px; text-align: center; animation: fadeInUp 0.5s var(--ease) both;
+  }
+  .result-card .big { font-family: var(--font-display); font-size: 3rem; font-weight: 800; letter-spacing: -0.03em; color: var(--accent); line-height: 1; }
+  .result-card .unit { font-size: 0.9rem; color: var(--fg-dim); font-weight: 600; }
+  .macro-pills { display: flex; gap: 8px; margin-top: 20px; }
+  .macro-pill { flex: 1; background: var(--bg-input); border-radius: var(--radius-sm); padding: 12px 6px; }
+  .macro-pill b { display: block; font-family: var(--font-display); font-size: 1.05rem; }
+  .macro-pill span { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-faint); font-weight: 700; }
 </style>
 </head>
 <body>
@@ -31,36 +40,47 @@
   <form id="ob-form" class="grow" style="display:flex; flex-direction:column;">
 
     <div class="ob-step active" data-step="1">
-      <div class="ob-question"><h2>¿Que cocinas te gustan?</h2><p>Elige todas las que quieras.</p></div>
-      <div class="chip-grid" id="grid-cocinas"></div>
+      <div class="ob-question"><h2>¿Cual es tu objetivo?</h2><p>Ajustaremos tus calorias diarias a esto.</p></div>
+      <div id="grid-objetivo"></div>
     </div>
 
     <div class="ob-step" data-step="2">
-      <div class="ob-question"><h2>Ingredientes que te encantan</h2><p>Elige o añade los tuyos.</p></div>
-      <div class="free-add">
-        <input type="text" id="fav-input" placeholder="Añadir ingrediente...">
-        <button type="button" class="btn btn-ghost btn-sm" id="fav-add">Añadir</button>
-      </div>
-      <div class="chip-grid" id="grid-favoritos"></div>
+      <div class="ob-question"><h2>¿Cual es tu sexo?</h2><p>Lo usamos solo para calcular tu gasto calorico.</p></div>
+      <div id="grid-sexo"></div>
     </div>
 
     <div class="ob-step" data-step="3">
-      <div class="ob-question"><h2>Ingredientes que odias o no puedes comer</h2><p>Alergias, intolerancias o simplemente no te gustan.</p></div>
-      <div class="free-add">
-        <input type="text" id="hate-input" placeholder="Añadir ingrediente...">
-        <button type="button" class="btn btn-ghost btn-sm" id="hate-add">Añadir</button>
+      <div class="ob-question"><h2>Cuentanos sobre ti</h2><p>Para afinar el calculo.</p></div>
+      <div class="field">
+        <label>Edad</label>
+        <input type="number" id="f-edad" min="14" max="99" inputmode="numeric" placeholder="25">
       </div>
-      <div class="chip-grid" id="grid-odiados"></div>
+      <div class="field">
+        <label>Altura (cm)</label>
+        <input type="number" id="f-altura" min="120" max="230" inputmode="numeric" placeholder="175">
+      </div>
+      <div class="field">
+        <label>Peso (kg)</label>
+        <input type="number" id="f-peso" min="35" max="250" step="0.1" inputmode="decimal" placeholder="70">
+      </div>
     </div>
 
     <div class="ob-step" data-step="4">
-      <div class="ob-question"><h2>¿Cual es tu nivel en la cocina?</h2></div>
-      <div id="grid-nivel"></div>
+      <div class="ob-question"><h2>¿Como de activo eres?</h2><p>Un dia normal, contando trabajo y ejercicio.</p></div>
+      <div id="grid-actividad"></div>
     </div>
 
     <div class="ob-step" data-step="5">
-      <div class="ob-question"><h2>¿Cuanto tiempo sueles tener para cocinar?</h2></div>
-      <div id="grid-tiempo"></div>
+      <div class="ob-question"><h2>Tu plan diario</h2><p>Puedes cambiarlo cuando quieras desde tu perfil.</p></div>
+      <div class="result-card">
+        <span class="big" id="r-kcal">0</span>
+        <span class="unit">kcal al dia</span>
+        <div class="macro-pills">
+          <div class="macro-pill"><b id="r-prot">0g</b><span>Proteina</span></div>
+          <div class="macro-pill"><b id="r-carb">0g</b><span>Carbos</span></div>
+          <div class="macro-pill"><b id="r-grasa">0g</b><span>Grasa</span></div>
+        </div>
+      </div>
     </div>
 
     <div class="grow"></div>

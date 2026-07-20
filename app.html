@@ -8,9 +8,48 @@
 <style>
   .home-top { display: flex; align-items: center; justify-content: space-between; padding: calc(18px + env(safe-area-inset-top)) 20px 4px; }
   .home-wrap { padding: 4px 20px 24px; }
-  .greet { margin: 6px 0 22px; }
-  .greet p { margin-top: 4px; }
-  .sec-label { font-size: 0.72rem; font-weight: 700; color: var(--fg-faint); letter-spacing: 0.06em; text-transform: uppercase; margin: 30px 0 14px; }
+  .greet { margin: 6px 0 18px; }
+  .greet p { margin-top: 4px; text-transform: capitalize; }
+  .sec-label { font-size: 0.72rem; font-weight: 700; color: var(--fg-faint); letter-spacing: 0.06em; text-transform: uppercase; margin: 26px 0 12px; }
+
+  .ring-card {
+    background: var(--bg-raised); border: var(--edge); border-radius: var(--radius);
+    padding: 20px; display: flex; align-items: center; gap: 20px;
+    animation: fadeInUp 0.45s var(--ease) both;
+  }
+  .ring-wrap { position: relative; width: 124px; height: 124px; flex-shrink: 0; }
+  .ring-wrap svg { transform: rotate(-90deg); }
+  .ring-bg { stroke: var(--bg-input); }
+  .ring-fg { stroke: var(--accent); stroke-linecap: round; transition: stroke-dashoffset 0.8s var(--ease); }
+  .ring-center {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+  }
+  .ring-center b { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+  .ring-center span { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-faint); font-weight: 700; }
+
+  .macro-rows { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .macro-row .lbl { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; }
+  .macro-row .lbl span:last-child { color: var(--fg-faint); font-weight: 600; }
+  .macro-bar { height: 6px; border-radius: 99px; background: var(--bg-input); overflow: hidden; }
+  .macro-bar i { display: block; height: 100%; border-radius: 99px; width: 0; transition: width 0.8s var(--ease); }
+  .macro-bar.prot i { background: var(--accent); }
+  .macro-bar.carb i { background: #C9A24B; }
+  .macro-bar.fat i { background: #B3452F; }
+
+  .meal-row {
+    display: flex; align-items: center; gap: 12px; padding: 14px 16px; margin-bottom: 10px;
+    background: var(--bg-raised); border: var(--edge); border-radius: var(--radius);
+    animation: fadeInUp 0.4s var(--ease) both;
+  }
+  .meal-row .info { flex: 1; min-width: 0; }
+  .meal-row .info strong { display: block; font-size: 0.98rem; }
+  .meal-row .info span { font-size: 0.75rem; color: var(--fg-faint); }
+  .meal-row .kcal { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; flex-shrink: 0; }
+  .meal-row .rm {
+    width: 30px; height: 30px; border-radius: 50%; border: none; flex-shrink: 0;
+    background: var(--danger-tint); color: var(--danger); font-size: 1rem; line-height: 1;
+  }
 </style>
 </head>
 <body>
@@ -24,43 +63,71 @@
         <path d="M9 24c-3 0-5-2.2-5-5s2-5 5-5c.4-3 3-5.3 6-5.3s5.6 2.3 6 5.3c2.6 0 4.8 1.9 5 4.4.1 2.8-2.1 5.1-5 5.1H9Z" stroke-width="2.2" stroke-linejoin="round"/>
       </svg>
     </span>
-    <div class="avatar" id="avatar">N</div>
+    <a href="perfil.html" class="avatar" id="avatar">N</a>
   </div>
 
   <div class="wrap grow home-wrap">
     <div class="greet rv d1">
       <h2 id="greet-h">Hola</h2>
-      <p>¿Que te apetece cocinar hoy?</p>
+      <p id="greet-date"></p>
     </div>
 
-    <a href="nevera.html" class="scan-cta rv d2" style="display:block;">
-      <strong>Escanea tu nevera</strong>
-      <span>Haz una foto de lo que tienes y te decimos que puedes cocinar hoy mismo.</span>
+    <div class="ring-card rv d2">
+      <div class="ring-wrap">
+        <svg width="124" height="124" viewBox="0 0 124 124" fill="none">
+          <circle class="ring-bg" cx="62" cy="62" r="52" stroke-width="11"/>
+          <circle class="ring-fg" id="kcal-ring" cx="62" cy="62" r="52" stroke-width="11" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+        </svg>
+        <div class="ring-center">
+          <b id="kcal-left">-</b>
+          <span id="kcal-left-lbl">kcal restantes</span>
+        </div>
+      </div>
+      <div class="macro-rows">
+        <div class="macro-row">
+          <div class="lbl"><span>Proteina</span><span id="m-prot">- / -</span></div>
+          <div class="macro-bar prot"><i id="b-prot"></i></div>
+        </div>
+        <div class="macro-row">
+          <div class="lbl"><span>Carbos</span><span id="m-carb">- / -</span></div>
+          <div class="macro-bar carb"><i id="b-carb"></i></div>
+        </div>
+        <div class="macro-row">
+          <div class="lbl"><span>Grasa</span><span id="m-grasa">- / -</span></div>
+          <div class="macro-bar fat"><i id="b-grasa"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <a href="escanear.html" class="scan-cta rv d3" style="display:block; margin-top:14px;">
+      <strong>Escanea tu comida</strong>
+      <span>Hazle una foto al plato y apuntamos las calorias y los macros por ti.</span>
     </a>
 
-    <div class="sec-label rv d3">Para ti</div>
-    <div id="feed" class="stagger"></div>
-
-    <div class="empty-state hidden" id="empty-state"><p>Todavia no hay recetas publicadas. Vuelve pronto.</p></div>
-    <div class="center" id="loading-state" style="padding:60px 0;"><div class="spinner"></div></div>
+    <div class="sec-label rv d4">Hoy</div>
+    <div id="meals-list"></div>
+    <div class="empty-state hidden" id="meals-empty" style="padding:26px 20px; flex:none;">
+      <p>Aun no has registrado nada hoy.<br>Escanea tu primera comida.</p>
+    </div>
+    <div class="center" id="loading-state" style="padding:40px 0;"><div class="spinner"></div></div>
   </div>
 
   <nav class="tabbar">
     <a href="app.html" class="active">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M9 11v11"/><path d="M17 2c-1.5 0-3 1.5-3 4v3c0 1.5.5 2 2 2v10"/></svg>
-      <span>Feed</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6.5 3.5"/></svg>
+      <span>Hoy</span>
     </a>
-    <a href="nevera.html">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="5" y1="10" x2="19" y2="10"/><line x1="8" y1="5" x2="8" y2="7"/><line x1="8" y1="13" x2="8" y2="15"/></svg>
-      <span>Nevera</span>
+    <a href="escanear.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3.5"/></svg>
+      <span>Escanear</span>
     </a>
-    <a href="guardadas.html">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
-      <span>Guardadas</span>
+    <a href="perfil.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg>
+      <span>Perfil</span>
     </a>
   </nav>
 </div>
 
-<script type="module" src="js/feed.js"></script>
+<script type="module" src="js/hoy.js"></script>
 </body>
 </html>
